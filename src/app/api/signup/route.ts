@@ -13,9 +13,16 @@ export const POST = asyncHandler(async (req) => {
     username,
   });
 
-  const findUser = await prisma.user.findUnique({
+  const findUser = await prisma.user.findFirst({
     where: {
-      email: validateInfo.email,
+      OR: [
+        {
+          email: validateInfo.email,
+        },
+        {
+          username: validateInfo.username,
+        },
+      ],
     },
   });
 
@@ -37,6 +44,7 @@ export const POST = asyncHandler(async (req) => {
   if (!createUser) {
     throw new ApiError("User not created");
   }
+  console.log(createUser);
   return NextResponse.json(
     { message: "Signup Successfully", data: createUser },
     { status: 200 }

@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,12 +19,15 @@ import { userZodSchema } from "@/schema/userZodSchema";
 import { useRouter } from "next/navigation";
 import { Request } from "@/utils/axios";
 import { useToast } from "@/hooks/use-toast";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 type SignUpFormType = z.infer<typeof userZodSchema>;
 
 export function SignUpForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: SignUpFormType) => {
     try {
@@ -36,12 +38,15 @@ export function SignUpForm() {
         toast({
           title: "Success",
           description: resp.data.message,
+          variant: "default",
         });
+        router.push("/auth/signin");
       }
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.response.data.error,
+        variant: "destructive",
       });
     }
   };
@@ -55,17 +60,64 @@ export function SignUpForm() {
     },
   });
 
+  const loginWithGoogle = async () => {
+    try {
+      setLoading(true);
+      const resp = await signIn("google", {
+        redirect: false,
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Internal Server Error",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loginWithGithub = async () => {
+    try {
+      setLoading(true);
+      const resp = await signIn("github", {
+        redirect: false,
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Internal Server Error",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto w-full  p-2 mt-[5%] space-y-5">
       <h1 className="text-center font-semibold text-3xl">Sign Up</h1>
-      <Button variant={"destructive"} size={"xl"} className=" w-full text-lg">
+      <Button
+        onClick={loginWithGoogle}
+        variant={"destructive"}
+        size={"xl"}
+        className=" w-full text-lg"
+      >
         <SocialIcon
           style={{ height: "30px", width: "30px" }}
           url="www.google.com"
         />
         Continue with Google
       </Button>
-      <Button variant={"outline"} size={"xl"} className="w-full text-lg">
+      <Button
+        disabled={loading}
+        onClick={loginWithGithub}
+        variant={"outline"}
+        size={"xl"}
+        className="w-full text-lg"
+      >
         <SocialIcon
           style={{ height: "30px", width: "30px" }}
           url="www.github.com"
@@ -94,8 +146,13 @@ export function SignUpForm() {
               )}
             />
           ))}
-          <Button size={"lg"} className="w-full" type="submit">
-            Continue
+          <Button
+            disabled={loading}
+            size={"lg"}
+            className="w-full"
+            type="submit"
+          >
+            {loading ? "Loading...." : "Continue"}
           </Button>
         </form>
       </Form>

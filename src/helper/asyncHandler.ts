@@ -9,7 +9,7 @@ type FunctionType = {
 export const asyncHandler = (fn: FunctionType) => {
   return async (req: NextRequest) => {
     try {
-      await fn(req);
+      return await fn(req);
     } catch (error: any) {
       if (error instanceof ApiError) {
         console.log("ApiError>>", error.message);

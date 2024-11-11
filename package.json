@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "push": "pnpx prisma db push",
-    "generate": "pnpx prisma generate"
+    "generate": "pnpx prisma generate",
+    "studio": "pnpx prisma studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

@@ -1,9 +1,12 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
 import bcrypt from "bcrypt";
 import { ApiError } from "@/helper/ApiError";
 import prisma from "@/utils/prismaDb";
 import env from "./env";
+import { Github } from "lucide-react";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -41,15 +44,53 @@ export const authOptions: NextAuthOptions = {
         return checkUser;
       },
     }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID as string,
+      clientSecret: env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    GithubProvider({
+      clientId: env.GITHUB_CLIENT_ID as string,
+      clientSecret: env.GITHUB_CLIENT_SECRET as string,
+    }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.userId = user.id;
         token.email = user.email;
         token.name = user.name;
       }
-      console.log("token", token);
+
+      if (account) {
+        const findUser = await prisma.user.findFirst({
+          where: {
+            email: user.email as string,
+          },
+        });
+        if (findUser) {
+          token.userId = user.id;
+          token.email = user.email;
+          token.name = user.name;
+        } else {
+          const createUser = await prisma.user.create({
+            data: {
+              email: token.email as string,
+              name: token.name as string,
+              password: `LoginBy${account.provider}`,
+              username: token.name as string,
+            },
+          });
+
+          if (!createUser) {
+            throw new ApiError("User not created");
+          }
+          token.userId = createUser.id;
+          token.email = createUser.email;
+          token.name = createUser.name;
+
+          return token;
+        }
+      }
       return token;
     },
     session({ session, token }) {

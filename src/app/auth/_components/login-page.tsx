@@ -36,7 +36,7 @@ export function LogInForm() {
         redirect: false,
         ...data,
       });
-        
+
       if (resp && resp.ok) {
         router.push("/");
       } else {
@@ -51,6 +51,7 @@ export function LogInForm() {
       toast({
         title: "Error",
         description: "Internal Server Error",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -65,17 +66,66 @@ export function LogInForm() {
     },
   });
 
+  const loginwithGoogle = async () => {
+    try {
+      setLoading(true);
+      const resp = await signIn("google", {
+        redirect: false,
+      });
+      console.log(resp);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Internal Server Error",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loginWithGithub = async () => {
+    try {
+      setLoading(true);
+      const resp = await signIn("github", {
+        redirect: false,
+      });
+      console.log(resp);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Internal Server Error",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto w-full  p-2 mt-[5%] space-y-5">
       <h1 className="text-center font-semibold text-3xl">Log In</h1>
-      <Button variant={"destructive"} size={"xl"} className=" w-full text-lg">
+      <Button
+        onClick={loginwithGoogle}
+        variant={"destructive"}
+        size={"xl"}
+        className=" w-full text-lg"
+        disabled={loading}
+      >
         <SocialIcon
           style={{ height: "30px", width: "30px" }}
           url="www.google.com"
         />
         Continue with Google
       </Button>
-      <Button variant={"outline"} size={"xl"} className="w-full text-lg">
+      <Button
+        onClick={loginWithGithub}
+        variant={"outline"}
+        size={"xl"}
+        className="w-full text-lg"
+      >
         <SocialIcon
           style={{ height: "30px", width: "30px" }}
           url="www.github.com"
