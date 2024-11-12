@@ -1,4 +1,4 @@
-import { Eye, Image, MessageCircle } from "lucide-react";
+import { Eye, Image, MessageCircle, PenIcon } from "lucide-react";
 
 export const NavList = [
   {
@@ -12,6 +12,10 @@ export const NavList = [
   {
     name: "Canvas Preview",
     icon: <Eye />,
+  },
+  {
+    name: "WhiteBoard",
+    icon: <PenIcon />,
   },
 ];
 
