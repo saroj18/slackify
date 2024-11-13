@@ -34,6 +34,7 @@ import { EditorView } from "@tiptap/pm/view";
 import React from "react";
 
 import hljs from "highlight.js";
+import { Slice } from "@tiptap/pm/model";
 
 const extensions = [...defaultExtensions, slashCommand];
 
@@ -131,7 +132,7 @@ const CanvasEditor = ({
             handleDrop: (
               view: EditorView,
               event: DragEvent,
-              _slice: string,
+              _slice: Slice,
               moved: boolean
             ) => handleImageDrop(view, event, moved, uploadFn),
             attributes: {

@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
 import {
@@ -6,8 +8,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import WorkSpaceSwitcher from "./workspace-switcher";
+import { HomeIcon, Image, PenIcon, Plus } from "lucide-react";
+import IconAvatar from "./icon-avatar";
+import { useRouter } from "next/navigation";
 
 export default function SideBtnView() {
+  const router = useRouter();
   return (
     <div className="flex flex-col justify-between items-center py-3 h-screen  w-full max-w-[70px]">
       <div>
@@ -26,24 +32,31 @@ export default function SideBtnView() {
           </PopoverContent>
         </Popover>
 
-        <Avatar className=" cursor-pointer">
-          <AvatarImage
-            className="rounded-md border-2"
-            src="https://icon-library.com/images/home-icon-transparent/home-icon-transparent-20.jpg"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <IconAvatar onClick={() => router.push("/workspace")} title="Home">
+          <HomeIcon strokeWidth={1} className="w-8 h-8 text-gray-600" />
+        </IconAvatar>
+
+        <IconAvatar
+          onClick={() => router.push("/workspace/canvas")}
+          title="Canvas"
+        >
+          <Image strokeWidth={1} className="w-8 h-8  text-gray-600" />
+        </IconAvatar>
+
+        <IconAvatar
+          onClick={() => router.push("/workspace/whiteboard")}
+          title="Board"
+        >
+          <PenIcon strokeWidth={1} className="w-8 h-8 text-gray-600" />
+        </IconAvatar>
       </div>
+
       <div className="flex flex-col">
         <Popover>
           <PopoverTrigger>
-            <Avatar className=" cursor-pointer">
-              <AvatarImage
-                className="rounded-md border-2"
-                src="https://github.com/shadcn.png"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <IconAvatar title="Add">
+              <Plus strokeWidth={1} className="w-8 h-8 text-gray-600" />
+            </IconAvatar>
           </PopoverTrigger>
           <PopoverContent className="w-full p-0 border-0">
             <WorkSpaceSwitcher />
