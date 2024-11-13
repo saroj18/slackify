@@ -8,11 +8,30 @@ import Invite from "./_components/invite";
 import ProjectName from "./_components/project-name";
 import { useRouter } from "next/navigation";
 
+type WorkSpace = {
+  workspaceName: string;
+  creatorName: string;
+  users: string;
+  projectName: string;
+};
+
+export type WorkSpaceProps = {
+  workspace: WorkSpace;
+  setWorkspace: React.Dispatch<React.SetStateAction<WorkSpace>>;
+};
+
 export default function page() {
   const [step, setStep] = useState(1);
   const router = useRouter();
+  const [workspace, setWorkspace] = useState({
+    workspaceName: "",
+    creatorName: "",
+    users: "",
+    projectName: "",
+  });
 
-  const stepHandler = (param: string) => {
+  const stepHandler = async (param: string) => {
+    console.log("demo");
     if (param === "next") {
       if (step < 4) {
         setStep(step + 1);
@@ -24,16 +43,45 @@ export default function page() {
       }
     }
     if (param == "finish") {
-      router.push("/workspace");
+      if (
+        !workspace.workspaceName ||
+        !workspace.creatorName ||
+        !workspace.users ||
+        !workspace.projectName
+      ) {
+        alert("Please fill all the fields");
+        return null;
+      } else {
+        const res = await fetch("/api/createworkspace", {
+          method: "POST",
+          body: JSON.stringify(workspace),
+        });
+        const data = await res.json();
+        console.log(data);
+        if (data.success) {
+          const workspaceData = data.data;
+          router.push(`/workspace/channel/${workspaceData.id}`);
+        }
+      }
     }
   };
+
+  console.log(workspace);
   return (
     <div className="bg-secondary h-screen flex flex-col justify-center items-center">
       <p>Step {step} of 4</p>
-      {step == 1 && <WorkSpaceName />}
-      {step == 2 && <YourName />}
-      {step == 3 && <Invite />}
-      {step == 4 && <ProjectName />}
+      {step == 1 && (
+        <WorkSpaceName setWorkspace={setWorkspace} workspace={workspace} />
+      )}
+      {step == 2 && (
+        <YourName setWorkspace={setWorkspace} workspace={workspace} />
+      )}
+      {step == 3 && (
+        <Invite setWorkspace={setWorkspace} workspace={workspace} />
+      )}
+      {step == 4 && (
+        <ProjectName setWorkspace={setWorkspace} workspace={workspace} />
+      )}
 
       <div className="flex gap-x-5 items-center">
         {step > 1 && (

@@ -4,7 +4,7 @@ import HomePage from "./_components/home-page";
 
 export default function Page() {
   return (
-    <div className="flex w-full border-2 border-red-500">
+    <div className="flex w-full">
       <HomeSideBar />
       <HomePage />
     </div>

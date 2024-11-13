@@ -2,8 +2,8 @@ import { ApiError } from "@/helper/ApiError";
 import { userZodSchema } from "@/schema/userZodSchema";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import prisma from "@/utils/prismaDb";
 import { asyncHandler } from "@/helper/asyncHandler";
+import { prisma } from "@/utils/prismaDb";
 
 export const POST = asyncHandler(async (req) => {
   const { email, password, username } = await req.json();

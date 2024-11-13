@@ -16,9 +16,32 @@ datasource db {
 
 
 model User {
-  id      String      @id @default(uuid())
-  email   String   @unique
-  name    String
-  password String
-  username String @unique
+  id         String      @id @default(uuid())
+  email      String      @unique
+  name       String
+  password   String
+  username   String      @unique
+  workspaceCreator Workspace[]
+}
+
+model Workspace {
+  id            String   @id @default(uuid())
+  name          String
+  adminName     String
+  users         String
+  projectName   String
+  createdBy     String
+  workspaceCreator User @relation(fields: [createdBy], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  channels      Channel[]
+}
+
+model Channel {
+  id         String   @id @default(uuid())
+  name       String
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
