@@ -4,9 +4,8 @@ import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import bcrypt from "bcrypt";
 import { ApiError } from "@/helper/ApiError";
-import prisma from "@/utils/prismaDb";
+import { prisma } from "@/utils/prismaDb";
 import env from "./env";
-import { Github } from "lucide-react";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -55,23 +54,13 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      if (user) {
-        token.userId = user.id;
-        token.email = user.email;
-        token.name = user.name;
-      }
-
       if (account) {
         const findUser = await prisma.user.findFirst({
           where: {
             email: user.email as string,
           },
         });
-        if (findUser) {
-          token.userId = user.id;
-          token.email = user.email;
-          token.name = user.name;
-        } else {
+        if (!findUser) {
           const createUser = await prisma.user.create({
             data: {
               email: token.email as string,
@@ -87,9 +76,23 @@ export const authOptions: NextAuthOptions = {
           token.userId = createUser.id;
           token.email = createUser.email;
           token.name = createUser.name;
-
-          return token;
+        } else {
+          token.userId = findUser.id;
+          token.email = findUser.email;
+          token.name = findUser.name;
         }
+      } else {
+        const findUserData = await prisma.user.findFirst({
+          where: {
+            email: token.email as string,
+          },
+        });
+        if (!findUserData) {
+          throw new ApiError("User not found");
+        }
+        token.userId = findUserData.id;
+        token.email = findUserData.email;
+        token.name = findUserData.name;
       }
       return token;
     },
