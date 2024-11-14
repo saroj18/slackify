@@ -56,11 +56,11 @@ export default function page() {
           method: "POST",
           body: JSON.stringify(workspace),
         });
-        const data = await res.json();
-        console.log(data);
-        if (data.success) {
-          const workspaceData = data.data;
-          router.push(`/workspace/channel/${workspaceData.id}`);
+        const respData = await res.json();
+        console.log(respData);
+        if (respData.success) {
+          const newWorkspace = respData.data;
+          router.push(`/workspace/${newWorkspace.id}`);
         }
       }
     }

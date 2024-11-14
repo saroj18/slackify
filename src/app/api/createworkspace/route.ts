@@ -7,7 +7,7 @@ import { prisma } from "@/utils/prismaDb";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (req: NextRequest) => {
-  const { id } = await getUser<UserType>(authOptions);
+  const { id } = await getUser<UserType>();
 
   const { workspaceName, creatorName, users, projectName } = await req.json();
 
@@ -35,6 +35,13 @@ export const POST = asyncHandler(async (req: NextRequest) => {
       users: validator.users,
       projectName: validator.projectName,
       createdBy: id,
+    },
+  });
+
+  await prisma.channel.create({
+    data: {
+      name: "general",
+      workspaceId: newWorkspace.id,
     },
   });
 

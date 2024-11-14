@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import CanvasPreview from "../../../_components/canvas-editor/canvas-preview-page";
+import CanvasPreview from "../../../../_components/canvas-editor/canvas-preview-page";
 import ChatPage from "../../channel/[id]/pages/chat-page";
 import Navbar from "./_components/nav";
 import CanvasEditor from "@/app/_components/canvas-editor/advanced-editor";

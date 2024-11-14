@@ -1,5 +1,6 @@
 import { AuthOptions, getServerSession, Session } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOptions } from "./authOptions";
 
 export interface UserType extends Session {
   id: string;
@@ -8,11 +9,13 @@ export interface UserType extends Session {
   picture: string;
 }
 
-export const getUser = async <T>(authOptions: AuthOptions): Promise<T> => {
+export const getUser = async <T>(): Promise<T> => {
   const user = (await getServerSession(authOptions)) as UserType;
-  if (!user) {
-    console.log("user not login");
-    return NextResponse.redirect("/api/auth/signin") as T;
-  }
+  console.log("user", user);
+  // if (!user) {
+  //   console.log("user not login");
+  //   return NextResponse.redirect("auth/signin") as T;
+
+  // }
   return user.user as T;
 };

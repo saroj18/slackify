@@ -36,7 +36,7 @@ export const asyncHandler = (fn: FunctionType) => {
           { status: 400 }
         );
       } else {
-        console.error(error);
+        console.error(error.message);
         return NextResponse.json(
           {
             error: "Internal Server Error",
