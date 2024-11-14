@@ -22,13 +22,14 @@ model User {
   password   String
   username   String      @unique
   workspaceCreator Workspace[]
+  workspaceUsers Workspace[] @relation("workspaceuser")
 }
 
 model Workspace {
   id            String   @id @default(uuid())
   name          String
   adminName     String
-  users         String
+  workspaceUsers User[] @relation("workspaceuser")
   projectName   String
   createdBy     String
   workspaceCreator User @relation(fields: [createdBy], references: [id])

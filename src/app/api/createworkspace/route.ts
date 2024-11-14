@@ -1,7 +1,6 @@
 import { ApiError } from "@/helper/ApiError";
 import { asyncHandler } from "@/helper/asyncHandler";
 import { WorkSpaceZodSchema } from "@/schema/workspace";
-import { authOptions } from "@/utils/authOptions";
 import { getUser, UserType } from "@/utils/checkUserOnServer";
 import { prisma } from "@/utils/prismaDb";
 import { NextRequest, NextResponse } from "next/server";
@@ -32,9 +31,11 @@ export const POST = asyncHandler(async (req: NextRequest) => {
     data: {
       name: validator.workspaceName,
       adminName: validator.creatorName,
-      users: validator.users,
       projectName: validator.projectName,
       createdBy: id,
+      workspaceUsers: {
+        connect: validator.users.map((user) => ({ id: user })),
+      },
     },
   });
 
