@@ -3,24 +3,34 @@ import { Card, CardContent } from "@/components/ui/card";
 import useLocalStorage from "@/hooks/use-local-storage";
 import { Plus, Bell } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function WorkSpaceSwitcher() {
   const [workspace, setWorkspace] = useState<any>(null);
   const [currentWorkspace, setCurrentWorkspace] = useState<any>(null);
+  const [loading, setLoading] = React.useState(false);
+
   const router = useRouter();
   const id = useParams();
 
   useEffect(() => {
     const getIWorkSpace = async () => {
-      const res = await fetch("/api/workspace/");
-      const data = await res.json();
+      try {
+        setLoading(true);
+        const res = await fetch("/api/workspace/");
+        const data = await res.json();
 
-      setWorkspace(data.data);
+        setWorkspace(data.data);
 
-      const current = data.data.find((ws: any) => ws.id === id.workspace);
+        const current = data.data.find((ws: any) => ws.id === id.workspace);
 
-      setCurrentWorkspace(current);
+        setCurrentWorkspace(current);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     getIWorkSpace();
@@ -36,12 +46,16 @@ export default function WorkSpaceSwitcher() {
             <div className="flex h-9 w-9 items-center justify-center rounded bg-purple-600 font-semibold">
               {currentWorkspace?.name[0]?.toUpperCase()}
             </div>
-            <div>
-              <div className="font-medium">{currentWorkspace?.name}</div>
-              <div className="text-sm text-slate-400">
-                -{currentWorkspace?.id}
+            {loading ? (
+              <p>loading</p>
+            ) : (
+              <div>
+                <div className="font-medium">{currentWorkspace?.name}</div>
+                <div className="text-sm text-slate-400">
+                  -{currentWorkspace?.id}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Notification Banner */}
@@ -60,7 +74,10 @@ export default function WorkSpaceSwitcher() {
 
           {/* Other Workspaces */}
           <div className="space-y-2">
-            {workspace &&
+            {loading ? (
+              <p>loading....</p>
+            ) : (
+              workspace?.length > 0 &&
               workspace.map((ws: any) => {
                 return (
                   <div
@@ -80,7 +97,8 @@ export default function WorkSpaceSwitcher() {
                     </div>
                   </div>
                 );
-              })}
+              })
+            )}
           </div>
 
           {/* Add Workspace Button */}

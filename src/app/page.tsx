@@ -14,9 +14,6 @@ export default function Home() {
           WelCome Back!!
         </h1>
         <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
       </div>
     </div>
   );

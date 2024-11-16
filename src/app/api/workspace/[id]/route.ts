@@ -2,8 +2,9 @@ import { asyncHandler } from "@/helper/asyncHandler";
 import { prisma } from "@/utils/prismaDb";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = asyncHandler(async (req: NextRequest) => {
-  const id = req.nextUrl.pathname.split("/")[3];
+export const GET = asyncHandler(async (req: NextRequest, { params }) => {
+  // const id = req.nextUrl.pathname.split("/")[3];
+  const id = params?.id;
   console.log(id);
 
   if (!id) {

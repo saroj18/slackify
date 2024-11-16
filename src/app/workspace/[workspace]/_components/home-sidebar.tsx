@@ -34,6 +34,8 @@ export default function HomeSideBar() {
   const [channelName, setChannelName] = useState("");
   const [workspace, setWorkspace] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
+  const [userLoading, setUserLoading] = useState(false);
+  const [channelLoading, setChannelLoading] = useState(false);
   const id = useParams();
   const { toast } = useToast();
   const router = useRouter();
@@ -49,45 +51,67 @@ export default function HomeSideBar() {
 
   useEffect(() => {
     const getIWorkSpace = async () => {
-      const res = await fetch(`/api/workspace/${id.workspace}`);
-      const respData = await res.json();
-      console.log(respData);
-      setWorkspace(respData.data);
-      console.log("chalyo");
+      try {
+        setChannelLoading(true);
+        const res = await fetch(`/api/workspace/${id.workspace}`);
+        const respData = await res.json();
+        console.log(respData);
+        setWorkspace(respData.data);
+        setChannelLoading(false);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setChannelLoading(false);
+      }
     };
     getIWorkSpace();
 
     const getUser = async () => {
-      const res = await fetch(`/api/user/${id.workspace}`);
-      const data = await res.json();
-      console.log(data);
-      setUser(data.data);
+      try {
+        setUserLoading(true);
+        const res = await fetch(`/api/user/${id.workspace}`);
+        const data = await res.json();
+        console.log(data);
+        setUser(data.data);
+        setUserLoading(false);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setUserLoading(false);
+      }
     };
     getUser();
   }, []);
 
   const channelCreateHandler = async () => {
-    console.log(workspace);
-    if (!channelName) {
-      alert("Please fill the channel name");
-      return null;
-    }
-    console.log(workspace);
-    const res = await fetch("/api/channel", {
-      method: "POST",
-      body: JSON.stringify({
-        name: channelName,
-        workspaceId: workspace.id,
-      }),
-    });
-    const data = await res.json();
-    console.log(data);
-    if (data.success) {
-      setChannelName("");
-      setWorkspace({
-        ...workspace,
-        channels: [...workspace.channels, data.data],
+    try {
+      setChannelLoading(true);
+      if (!channelName) {
+        alert("Please fill the channel name");
+        return null;
+      }
+      console.log(workspace);
+      const res = await fetch("/api/channel", {
+        method: "POST",
+        body: JSON.stringify({
+          name: channelName,
+          workspaceId: workspace.id,
+        }),
       });
+      const data = await res.json();
+      console.log(data);
+      if (data.success) {
+        setChannelName("");
+        setWorkspace({
+          ...workspace,
+          channels: [...workspace.channels, data.data],
+        });
+      }
+      setChannelLoading(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setChannelLoading(false);
     }
   };
 
@@ -109,6 +133,13 @@ export default function HomeSideBar() {
       body: JSON.stringify({ userList, workspaceId: id.workspace }),
     });
     const data = await resp.json();
+    if (data?.status) {
+      toast({
+        title: "Invitation Sent",
+        description: "Invitation sent successfully",
+        type: "background",
+      });
+    }
   };
 
   return (
@@ -179,17 +210,23 @@ export default function HomeSideBar() {
           <p className="font-semibold text-lg">Channels</p>
         </CollapsibleTrigger>
         <div className="pl-4">
-          {workspace?.channels?.map((channel: any) => (
-            <CollapsibleContent
-              key={channel.id}
-              onClick={() =>
-                router.push(`/workspace/${workspace.id}/channel/${channel.id}`)
-              }
-              className="font-mono cursor-pointer"
-            >
-              # {channel.name}
-            </CollapsibleContent>
-          ))}
+          {channelLoading ? (
+            <p>loading..</p>
+          ) : (
+            workspace?.channels?.map((channel: any) => (
+              <CollapsibleContent
+                key={channel.id}
+                onClick={() =>
+                  router.push(
+                    `/workspace/${workspace.id}/channel/${channel.id}`
+                  )
+                }
+                className="font-mono cursor-pointer"
+              >
+                # {channel.name}
+              </CollapsibleContent>
+            ))
+          )}
         </div>
       </Collapsible>
 
@@ -232,16 +269,19 @@ export default function HomeSideBar() {
         </DialogContent>
       </Dialog>
 
-      <Collapsible defaultOpen={true}>
+      <Collapsible>
         <CollapsibleTrigger
           onClick={() => clickHandler("chat")}
           className="flex items-center "
         >
-          {!isOpen.chat ? <ChevronDown /> : <ChevronRight />}
+          {!isOpen.chat ? <ChevronRight /> : <ChevronDown />}
           <p className="font-semibold text-lg">Direct Chat</p>
         </CollapsibleTrigger>
         <div className="pl-4">
-          {user?.workspaceUsers?.length > 0 &&
+          {userLoading ? (
+            <p>loading..</p>
+          ) : (
+            user?.workspaceUsers?.length > 0 &&
             user.workspaceUsers.map((u: any) => (
               <CollapsibleContent
                 onClick={() => router.push("/workspace/chats/1")}
@@ -250,7 +290,8 @@ export default function HomeSideBar() {
               >
                 {u.name}
               </CollapsibleContent>
-            ))}
+            ))
+          )}
         </div>
       </Collapsible>
     </div>

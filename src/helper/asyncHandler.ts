@@ -2,14 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { ApiError } from "./ApiError";
 import { ZodError } from "zod";
 
+type ContextType = {
+  params?: { [key: string]: string }; // Dynamic route parameters
+  searchParams?: URLSearchParams; // Query parameters
+};
 type FunctionType = {
-  (req: NextRequest): Promise<NextResponse>;
+  (req: NextRequest, context: ContextType): Promise<NextResponse>;
 };
 
 export const asyncHandler = (fn: FunctionType) => {
-  return async (req: NextRequest) => {
+  return async (req: NextRequest, context: ContextType) => {
     try {
-      return await fn(req);
+      return await fn(req, context);
     } catch (error: any) {
       if (error instanceof ApiError) {
         console.log("ApiError>>", error.message);

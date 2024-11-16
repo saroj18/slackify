@@ -1,3 +1,4 @@
+import { PUSHER_CLIENT } from "@/utils/pusher";
 import { Eye, Image, MessageCircle, PenIcon } from "lucide-react";
 
 export const NavList = [
@@ -22,6 +23,16 @@ export const NavList = [
 export const config = {
   placeholderText: "Type your messages..",
   charCounterCount: false,
+  events: {
+    focus: function () {
+      console.log("focus dam");
+      const data = PUSHER_CLIENT.channel("typing").trigger("client-typing", {
+        typing: true,
+      });
+      
+      console.log(data);
+    },
+  },
   imageUpload: true,
   toolbarButtons: {
     moreText: {

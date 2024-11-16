@@ -6,6 +6,7 @@ import logo from "../../../assets/logo.png";
 import { Button } from "@/components/ui/button";
 import SearchBox from "./search-box";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
@@ -15,13 +16,11 @@ export default function Navbar() {
       <div className="flex justify-between items-center  w-full max-w-[500px]">
         <Button>Pricing</Button>
         <SearchBox />
-        <Button
-          onClick={() => router.push("/createworkspace")}
-          size={"xl"}
-          className="uppercase"
-        >
-          Create a new workspace
-        </Button>
+        <Link href="/createworkspace">
+          <Button size={"xl"} className="uppercase">
+            Create a new workspace
+          </Button>
+        </Link>
       </div>
     </nav>
   );

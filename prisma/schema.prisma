@@ -23,6 +23,7 @@ model User {
   username   String      @unique
   workspaceCreator Workspace[]
   workspaceUsers Workspace[] @relation("workspaceuser")
+  messages Message[]
 }
 
 model Workspace {
@@ -36,6 +37,7 @@ model Workspace {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   channels      Channel[]
+  messages      Message[]
 }
 
 model Channel {
@@ -43,6 +45,21 @@ model Channel {
   name       String
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  messages   Message[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Message{
+  id         String   @id @default(uuid())
+  message String
+  type String
+  senderId String
+  sender User @relation(fields: [senderId], references: [id],onDelete: Cascade)
+  channelId String?
+  channel Channel? @relation(fields: [channelId], references: [id],onDelete: Cascade)
+  workspaceId String?
+  workspace Workspace? @relation(fields: [workspaceId], references: [id],onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

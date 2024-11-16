@@ -3,19 +3,19 @@ import { getUser, UserType } from "@/utils/checkUserOnServer";
 import { prisma } from "@/utils/prismaDb";
 import { NextResponse } from "next/server";
 
-export const GET = asyncHandler(async (req) => {
-  await getUser<UserType>();
+export const GET = asyncHandler(async (req, { params }) => {
+  const data = await getUser<UserType>();
+  console.log(data);
 
-  const searchParams = req.nextUrl.searchParams;
-  const query = searchParams.get("id");
+  const id = params?.id;
 
-  if (!query) {
+  if (!id) {
     throw new Error("Invalid channel id");
   }
 
   const channel = await prisma.channel.findUnique({
     where: {
-      id: query,
+      id,
     },
   });
 
@@ -23,8 +23,5 @@ export const GET = asyncHandler(async (req) => {
     throw new Error("Channel not found");
   }
 
-  return NextResponse.json(
-    { message: "", data: channel },
-    { status: 200 }
-  );
+  return NextResponse.json({ message: "", data: channel }, { status: 200 });
 });

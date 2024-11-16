@@ -1,15 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavList } from "../constant/constant";
+import { useParams } from "next/navigation";
 
 type NavType = {
-    state: string;
-    setState: React.Dispatch<React.SetStateAction<string>>;
-    };
+  state: string;
+  setState: React.Dispatch<React.SetStateAction<string>>;
+};
 
-export default function Navbar({ setState, state }:NavType) {
+export default function Navbar({ setState, state }: NavType) {
+  const { id } = useParams();
+  const [channel, setChannel] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getChannel = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/channel/${id}`);
+        const data = await res.json();
+        setChannel(data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getChannel();
+  }, [id]);
+
   return (
     <div className=" h-24 shadow-md p-2 mb-5">
-      <h1 className="font-bold text-2xl"># Demo Channels</h1>
+      <h1 className="font-bold text-2xl flex items-center">
+        # {loading ? <p>loading...</p> : channel?.name}
+      </h1>
       <div className="flex gap-x-5 my-4">
         {NavList.map((item) => {
           return (

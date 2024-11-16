@@ -3,8 +3,8 @@ import { asyncHandler } from "@/helper/asyncHandler";
 import { prisma } from "@/utils/prismaDb";
 import { NextResponse } from "next/server";
 
-export const GET = asyncHandler(async (req) => {
-  const workspaceId = req.nextUrl.pathname.split("/")[3];
+export const GET = asyncHandler(async (req, { params }) => {
+  const workspaceId = params?.id;
 
   if (!workspaceId) {
     throw new ApiError("provide workspaceId");

@@ -1,14 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MessageCard from "./message-card";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 
-export default function MessagePage() {
+export default function MessagePage({ messageList }: { messageList: any }) {
+  console.log(messageList);
+  const { data } = useSession();
+  const { id } = useParams();
+  const chatPageRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    chatPageRef.current?.scrollTo({
+      top: chatPageRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messageList]);
+  console.log(data?.user.id);
+
   return (
-    <div className="flex flex-col flex-grow space-y-3 h-[calc(100vh-10rem)] overflow-y-scroll p-5 w-full">
-      {Array(10)
-        .fill(0)
-        .map((_, i) => (
-          <MessageCard align={i % 2 == 0 ? "left" : "right"} key={i} />
-        ))}
+    <div
+      ref={chatPageRef}
+      className="flex flex-col flex-grow space-y-3 h-[calc(100vh-10rem)] overflow-y-scroll p-5 w-full"
+    >
+      {messageList?.length > 0 &&
+        messageList.map(
+          (item: any, index: any) =>
+            item.channelId == id && (
+              <MessageCard
+                senderName={item.senderName}
+                message={item.message}
+                align={item.senderId == data?.user.id ? "right" : "left"}
+                key={index}
+              />
+            )
+        )}
     </div>
   );
 }

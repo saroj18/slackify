@@ -3,7 +3,7 @@ import { getUser, UserType } from "@/utils/checkUserOnServer";
 import { prisma } from "@/utils/prismaDb";
 import { NextResponse } from "next/server";
 
-export const GET = asyncHandler(async (req) => {
+export const GET = asyncHandler(async (req,) => {
   const { id } = await getUser<UserType>();
   const workspace = await prisma.workspace.findMany({
     where: {
