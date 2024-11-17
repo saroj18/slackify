@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import useLocalStorage from "@/hooks/use-local-storage";
-import { Plus, Bell } from "lucide-react";
+import { Plus, Bell, Trash } from "lucide-react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -35,6 +36,20 @@ export default function WorkSpaceSwitcher() {
 
     getIWorkSpace();
   }, []);
+
+  const deleteWorkspaceHandler = async (id: string) => {
+    try {
+      const resp = await fetch("/api/workspace/" + id, {
+        method: "DELETE",
+      });
+      const respData = await resp.json();
+      if (respData?.success) {
+        router.refresh();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   console.log(currentWorkspace);
   return (
@@ -83,18 +98,26 @@ export default function WorkSpaceSwitcher() {
                   <div
                     onClick={() => {
                       setCurrentWorkspace(ws);
-                      router.push(`/workspace/${ws.id}`);
                     }}
                     key={ws.id}
-                    className="flex items-center gap-3 cursor-pointer"
+                    className="flex items-center justify-between "
                   >
-                    <div className="flex h-9 w-9 items-center justify-center rounded bg-purple-600 font-semibold">
-                      {ws.name[0].toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="font-medium">{ws.name}</div>
-                      <div className="text-sm text-slate-400">-{ws.id}</div>
-                    </div>
+                    <Link
+                      href={`/workspace/${ws.id}`}
+                      className="flex gap-3 cursor-pointer"
+                    >
+                      <div className="flex h-9 w-9 items-center justify-center rounded bg-purple-600 font-semibold">
+                        {ws.name[0].toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="font-medium">{ws.name}</div>
+                        <div className="text-sm text-slate-400">-{ws.id}</div>
+                      </div>
+                    </Link>
+                    <Trash
+                      onClick={() => deleteWorkspaceHandler(ws.id)}
+                      className=" text-slate-400 cursor-pointer"
+                    />
                   </div>
                 );
               })

@@ -37,3 +37,31 @@ export const GET = asyncHandler(async (req: NextRequest, { params }) => {
 
   return NextResponse.json({ success: true, data: workspace }, { status: 200 });
 });
+
+export const DELETE = asyncHandler(async (req: NextRequest, { params }) => {
+  const id = params?.id;
+  console.log(id);
+
+  if (!id) {
+    throw new Error("Invalid workspace id");
+  }
+
+  const workspace = await prisma.workspace.delete({
+    where: {
+      id,
+    },
+  });
+
+  if (!workspace) {
+    throw new Error("Workspace not found");
+  }
+
+  return NextResponse.json(
+    {
+      success: true,
+      data: workspace,
+      messssage: "workspace deleted successfully",
+    },
+    { status: 200 }
+  );
+});
