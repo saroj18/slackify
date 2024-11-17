@@ -68,6 +68,7 @@ export default function ChatPage() {
     <Fragment>
       <MessagePage messageList={messageList} />
       <div className=" relative  ">
+        <p>channel</p>
         <Suspense fallback={<p>Loading...</p>}>
           <TextEditor setValue={setValue} value={value} />
         </Suspense>

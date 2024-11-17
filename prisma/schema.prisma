@@ -23,7 +23,8 @@ model User {
   username   String      @unique
   workspaceCreator Workspace[]
   workspaceUsers Workspace[] @relation("workspaceuser")
-  messages Message[]
+  sentMessage      Message[] @relation("sentMessage")
+  receivedMessage Message[] @relation("receivedMessage")
 }
 
 model Workspace {
@@ -55,7 +56,9 @@ model Message{
   message String
   type String
   senderId String
-  sender User @relation(fields: [senderId], references: [id],onDelete: Cascade)
+  sender User @relation("sentMessage",fields: [senderId], references: [id],onDelete: Cascade)
+  receiverId String?
+  receiver User? @relation("receivedMessage",fields: [receiverId], references: [id],onDelete: Cascade)
   channelId String?
   channel Channel? @relation(fields: [channelId], references: [id],onDelete: Cascade)
   workspaceId String?

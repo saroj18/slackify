@@ -10,9 +10,8 @@ import Link from "next/link";
 
 export default function ProjectCard() {
   const [workspace, setWorkspace] = React.useState<any>([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const { data } = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     const getWorkspace = async () => {
@@ -20,6 +19,7 @@ export default function ProjectCard() {
         setLoading(true);
         const resp = await fetch("/api/workspace");
         const data = await resp.json();
+        console.log(data.data);
         setWorkspace(data.data);
         setLoading(false);
       } catch (error) {
@@ -34,15 +34,18 @@ export default function ProjectCard() {
 
   return (
     <div className="mx-auto my-4 max-w-4xl rounded-lg bg-purple-50/95 p-6">
-      <h1 className="mb-6 text-lg font-medium text-gray-900">
-        Workspaces for {data && data.user.email}
-      </h1>
+      {data && (
+        <h1 className="mb-6 text-lg font-medium text-gray-900">
+          Workspaces for {data && data.user.email}
+        </h1>
+      )}
       {loading ? (
         <p>Loading...</p>
+      ) : workspace?.length == 0 ? (
+        <p>No workspace found</p>
       ) : (
-        workspace &&
-        workspace.map((ws: any) => (
-          <Card key={ws.id} className="border-0 shadow-sm">
+        workspace?.map((ws: any) => (
+          <Card key={ws.id} className="border-0 shadow-sm my-3">
             <CardContent className="flex items-center justify-between p-4">
               <div className="flex items-center gap-4">
                 <div className="h-12 w-12 overflow-hidden rounded">
@@ -60,7 +63,7 @@ export default function ProjectCard() {
                         M
                       </AvatarFallback>
                     </Avatar>
-                    <span>{ws.channels.length} member</span>
+                    <span>{ws.workspaceUsers?.length} member</span>
                     <Avatar className="h-5 w-5 flex justify-center items-center">
                       <AvatarFallback className="bg-gray-200 text-[10px]">
                         #

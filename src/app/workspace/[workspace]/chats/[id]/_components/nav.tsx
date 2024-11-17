@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavList } from "../../../channel/[id]/constant/constant";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 type NavType = {
   state: string;
@@ -8,6 +10,23 @@ type NavType = {
 };
 
 export default function Navbar({ state, setState }: NavType) {
+  const { id } = useParams();
+  const [user, setUser] = useState<any>(null);
+  const { data } = useSession();
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const resp = await fetch("/api/user/" + id);
+        const respData = await resp.json();
+        console.log(respData);
+        setUser(respData.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getUser();
+  }, [id]);
   return (
     <div className=" h-28 shadow-md p-4 mb-5">
       <div className="flex items-center gap-x-2">
@@ -18,7 +37,9 @@ export default function Navbar({ state, setState }: NavType) {
           />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <h1 className="font-bold text-2xl">Saroj Aryal</h1>
+        <h1 className="font-bold text-2xl">
+          {user ? (user.id == data?.user.id ? "You" : user.name) : "loading.."}
+        </h1>
       </div>
       <div className="flex gap-x-5 my-4">
         {NavList.map((item) => {

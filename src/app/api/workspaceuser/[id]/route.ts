@@ -4,15 +4,28 @@ import { prisma } from "@/utils/prismaDb";
 import { NextResponse } from "next/server";
 
 export const GET = asyncHandler(async (req, { params }) => {
-  const userId = params?.id;
+  const workspaceId = params?.id;
 
-  if (!userId) {
-    throw new ApiError("provide userId");
+  if (!workspaceId) {
+    throw new ApiError("provide workspaceId");
   }
 
-  const findUser = await prisma.user.findFirst({
+  const findWorkspace = await prisma.workspace.findFirst({
     where: {
-      id: userId,
+      id: workspaceId,
+    },
+  });
+
+  if (!findWorkspace) {
+    throw new ApiError("workspace not found");
+  }
+
+  const findUser = await prisma.workspace.findFirst({
+    where: {
+      id: workspaceId,
+    },
+    include: {
+      workspaceUsers: true,
     },
   });
 

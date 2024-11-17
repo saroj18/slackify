@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import env from "@/utils/env";
+import { useSession } from "next-auth/react";
 
 export default function HomeSideBar() {
   const [isOpen, setIsOpen] = React.useState({
@@ -39,6 +40,7 @@ export default function HomeSideBar() {
   const id = useParams();
   const { toast } = useToast();
   const router = useRouter();
+  const { data } = useSession();
 
   const clickHandler = (param: string) => {
     if (param === "channel") {
@@ -69,7 +71,7 @@ export default function HomeSideBar() {
     const getUser = async () => {
       try {
         setUserLoading(true);
-        const res = await fetch(`/api/user/${id.workspace}`);
+        const res = await fetch(`/api/workspaceuser/${id.workspace}`);
         const data = await res.json();
         console.log(data);
         setUser(data.data);
@@ -284,11 +286,13 @@ export default function HomeSideBar() {
             user?.workspaceUsers?.length > 0 &&
             user.workspaceUsers.map((u: any) => (
               <CollapsibleContent
-                onClick={() => router.push("/workspace/chats/1")}
+                onClick={() =>
+                  router.push(`/workspace/${id.workspace}/chats/${u.id}`)
+                }
                 className="font-mono cursor-pointer"
                 key={u.id}
               >
-                {u.name}
+                {u.id == data?.user.id ? "You" : u.name}
               </CollapsibleContent>
             ))
           )}

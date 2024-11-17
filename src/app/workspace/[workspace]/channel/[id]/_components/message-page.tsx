@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 export default function MessagePage({ messageList }: { messageList: any }) {
   console.log(messageList);
   const { data } = useSession();
-  const { id } = useParams();
+  const { id, workspace } = useParams();
   const chatPageRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,9 +25,12 @@ export default function MessagePage({ messageList }: { messageList: any }) {
       {messageList?.length > 0 &&
         messageList.map(
           (item: any, index: any) =>
-            item.channelId == id && (
+            item?.workspaceId == workspace &&
+            (item?.channelId == id ||
+              item?.senderId == data?.user.id ||
+              item?.receiverId == data?.user.id) && (
               <MessageCard
-                senderName={item.senderName}
+                senderName={item?.sender?.name || item?.senderName}
                 message={item.message}
                 align={item.senderId == data?.user.id ? "right" : "left"}
                 key={index}

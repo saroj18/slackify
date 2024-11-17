@@ -6,9 +6,10 @@ import { prisma } from "@/utils/prismaDb";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (req: NextRequest) => {
-  const { id } = await getUser<UserType>();
+  const { id,email,name } = await getUser<UserType>();
 
-  const { workspaceName, creatorName, users, projectName } = await req.json();
+  let { workspaceName, creatorName, users, projectName } = await req.json();
+  users = Array.isArray(users) ? users : [users];
 
   const validator = WorkSpaceZodSchema.parse({
     workspaceName,
@@ -34,10 +35,14 @@ export const POST = asyncHandler(async (req: NextRequest) => {
       projectName: validator.projectName,
       createdBy: id,
       workspaceUsers: {
-        connect: validator.users.map((user) => ({ id: user })),
-      },
+        connect: {
+          id
+        }
+      }
     },
+  
   });
+
 
   await prisma.channel.create({
     data: {

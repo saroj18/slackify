@@ -34,7 +34,11 @@ export const GET = asyncHandler(async (req) => {
         },
       },
     },
+    include: {
+      workspaceUsers: true,
+    },
   });
+  console.log(findExtingUser);
 
   if (findExtingUser) {
     throw new ApiError("user already exist");
