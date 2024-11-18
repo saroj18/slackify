@@ -1,14 +1,14 @@
 import React from "react";
 //@ts-ignore
-import { EditorContent, EditorRoot } from "novel";
+import { EditorContent, EditorRoot, JSONContent } from "novel";
 import { defaultExtensions } from "@/app/_components/canvas-editor/extension";
 
-export default function CanvasPreview({ content }: { content: string }) {
-  console.log(content);
+export default function CanvasPreview({ content }: { content: JSONContent }) {
   return (
     <div className="max-h-[635px] h-full overflow-y-scroll">
       <EditorRoot>
         <EditorContent
+          key={JSON.stringify(content) + Math.random()}
           initialContent={content}
           extensions={defaultExtensions}
           editorProps={{

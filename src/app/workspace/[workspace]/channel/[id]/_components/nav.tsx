@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavList } from "../constant/constant";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type NavType = {
   state: string;
@@ -11,6 +12,7 @@ export default function Navbar({ setState, state }: NavType) {
   const { id } = useParams();
   const [channel, setChannel] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const { data } = useSession();
 
   useEffect(() => {
     const getChannel = async () => {
@@ -18,6 +20,7 @@ export default function Navbar({ setState, state }: NavType) {
         setLoading(true);
         const res = await fetch(`/api/channel/${id}`);
         const data = await res.json();
+        console.log(data.data.workspace.createdBy);
         setChannel(data.data);
         setLoading(false);
       } catch (error) {
@@ -37,16 +40,19 @@ export default function Navbar({ setState, state }: NavType) {
       <div className="flex gap-x-5 my-4">
         {NavList.map((item) => {
           return (
-            <div
-              onClick={() => setState(item.name)}
-              key={item.name}
-              className={`flex items-center gap-x-1 cursor-pointer ${
-                state == item.name && "text-blue-500"
-              }`}
-            >
-              <span>{item.icon}</span>
-              <span>{item.name}</span>
-            </div>
+            item.name=='Canvas' &&
+            channel?.workspace?.createdBy !== data?.user.id ?null: (
+              <div
+                onClick={() => setState(item.name)}
+                key={item.name}
+                className={`flex items-center gap-x-1 cursor-pointer ${
+                  state == item.name && "text-blue-500"
+                } `}
+              >
+                <span>{item.icon}</span>
+                <span>{item.name}</span>
+              </div>
+            )
           );
         })}
       </div>

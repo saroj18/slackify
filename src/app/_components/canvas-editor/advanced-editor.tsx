@@ -14,7 +14,7 @@ import {
   EditorRoot,
 } from "novel";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { defaultExtensions } from "./extension";
 import { ColorSelector } from "./selectors/color-selector";
@@ -32,28 +32,27 @@ import { Separator } from "@/components/ui/separator";
 import { Editor, JSONContent, Range } from "@tiptap/core";
 import { EditorView } from "@tiptap/pm/view";
 import React from "react";
-
+import * as jsondiffpatch from "jsondiffpatch";
 import hljs from "highlight.js";
 import { Slice } from "@tiptap/pm/model";
+import { compareEditorContent } from "@/utils/findDifference";
+import { useParams } from "next/navigation";
 
 const extensions = [...defaultExtensions, slashCommand];
 
 type EditorType = {
-  setContent: React.Dispatch<React.SetStateAction<string>>;
-  htmlLocalStorageKey: string;
-  markdownLocalStorageKey: string;
   novelLocalStorageKey: string;
+  setNewChanges: React.Dispatch<React.SetStateAction<any[]>>;
+  setInitialContent: any;
+  initialContent: any;
 };
 
 const CanvasEditor = ({
-  setContent,
-  htmlLocalStorageKey,
-  markdownLocalStorageKey,
   novelLocalStorageKey,
+  setNewChanges,
+  setInitialContent,
+  initialContent,
 }: EditorType) => {
-  const [initialContent, setInitialContent] = useState<null | JSONContent>(
-    null
-  );
   const [saveStatus, setSaveStatus] = useState("Saved");
   const [charsCount, setCharsCount] = useState();
 
@@ -61,6 +60,7 @@ const CanvasEditor = ({
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
+  const canvasContentRef = useRef<null | JSONContent>(null);
 
   //Apply Codeblock Highlighting on the HTML from editor.getHTML()
   const highlightCodeblocks = (content: string) => {
@@ -75,31 +75,31 @@ const CanvasEditor = ({
 
   const debouncedUpdates = useDebouncedCallback(async (editor: Editor) => {
     const json = editor.getJSON();
+    const data = compareEditorContent(canvasContentRef.current, json);
+    canvasContentRef.current = json;
+
+    if (data.length > 0) {
+      setNewChanges(data);
+    }
+    console.log(data);
     setCharsCount(editor.storage.characterCount.words());
-    window.localStorage.setItem(
-      htmlLocalStorageKey,
-      highlightCodeblocks(editor.getHTML())
-    );
+    setInitialContent(json);
+
     window.localStorage.setItem(novelLocalStorageKey, JSON.stringify(json));
     const newContent = window.localStorage.getItem(novelLocalStorageKey);
-    setContent(JSON.parse(newContent!));
-    window.localStorage.setItem(
-      markdownLocalStorageKey,
-      editor.storage.markdown.getMarkdown()
-    );
+
     setSaveStatus("Saved");
   }, 500);
 
   useEffect(() => {
     const content = window.localStorage.getItem(novelLocalStorageKey);
-    if (content) {
-      setInitialContent(JSON.parse(content));
-      const data = window.localStorage.getItem(markdownLocalStorageKey);
-      setContent(JSON.parse(content));
-    } else setInitialContent(defaultEditorContent);
+    console.log("content", content);
+
+    setInitialContent(JSON.parse(content!));
+    canvasContentRef.current = JSON.parse(content!);
   }, []);
 
-  if (!initialContent) return null;
+  console.log("component rerender");
 
   return (
     <div className="relative w-full max-h-[620px]  ">
@@ -119,6 +119,7 @@ const CanvasEditor = ({
       </div>
       <EditorRoot>
         <EditorContent
+          key={initialContent}
           initialContent={initialContent}
           extensions={extensions}
           className="relative max-h-[635px] overflow-y-scroll border-2w-full border-muted bg-background sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:shadow-lg"

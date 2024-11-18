@@ -60,13 +60,14 @@ export const POST = asyncHandler(async (req: NextRequest) => {
     throw new ApiError("Message not saved", 400);
   }
   console.log("chat receiver", `chat-${receiver}`);
-  PUSHER_SERVER.trigger(`chat-${receiver}`, "message", {
+  const dta = await PUSHER_SERVER.trigger(`chat-${receiver}`, "message", {
     message,
     senderId: id,
     receiverId: receiver,
     senderName: saveMessage.sender.name,
     workspaceId,
   });
+  console.log("dta>>", dta);
 
   return NextResponse.json(
     { status: "success", message: "", data: saveMessage },

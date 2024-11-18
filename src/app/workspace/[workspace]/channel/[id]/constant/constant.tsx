@@ -5,18 +5,22 @@ export const NavList = [
   {
     name: "Message",
     icon: <MessageCircle />,
+    hidden: false,
   },
   {
     name: "Canvas",
     icon: <Image />,
+    hidden: true,
   },
   {
     name: "Canvas Preview",
     icon: <Eye />,
+    hidden: false,
   },
   {
     name: "WhiteBoard",
     icon: <PenIcon />,
+    hidden: false,
   },
 ];
 
@@ -29,7 +33,7 @@ export const config = {
       const data = PUSHER_CLIENT.channel("typing").trigger("client-typing", {
         typing: true,
       });
-      
+
       console.log(data);
     },
   },

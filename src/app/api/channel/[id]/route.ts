@@ -17,6 +17,14 @@ export const GET = asyncHandler(async (req, { params }) => {
     where: {
       id,
     },
+    include: {
+      workspace: {
+        select: {
+          id: true,
+          createdBy: true,
+        },
+      },
+    },
   });
 
   if (!channel) {
