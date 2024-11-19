@@ -7,23 +7,22 @@ import WhiteBoard from "@/app/_components/whiteboard/whiteboard";
 import { useParams } from "next/navigation";
 import Navbar from "./_components/nav";
 import ChatPage from "./pages/chat-page";
-import { PUSHER_CLIENT } from "@/utils/pusher";
-import { JSONContent } from "novel";
 import CanvasPage from "./pages/canvas-page";
 import CanvasPreviewPage from "./pages/canvas-preview-page";
 
 export default function page() {
   const [state, setState] = useState("Message");
-  // const [workspace, setWorkspace] = useState<any>(null);
+  const [workspace, setWorkspace] = useState<any>(null);
+  const { workspace: workspaceId } = useParams();
 
   useEffect(() => {
-    // const getIWorkSpace = async () => {
-    //   const res = await fetch("/api/workspace/" + id);
-    //   const data = await res.json();
-    //   console.log(data);
-    //   setWorkspace(data);
-    // };
-    // getIWorkSpace();
+    const getIWorkSpace = async () => {
+      const res = await fetch("/api/workspace/" + workspaceId);
+      const data = await res.json();
+      console.log(data);
+      setWorkspace(data);
+    };
+    getIWorkSpace();
   }, []);
 
   return (
@@ -32,7 +31,7 @@ export default function page() {
       {state == "Message" && <ChatPage />}
       {state == "Canvas" && <CanvasPage />}
       {state == "Canvas Preview" && <CanvasPreviewPage />}
-      {state == "WhiteBoard" && <WhiteBoard />}
+      {state == "WhiteBoard" && <WhiteBoard workspace={workspace} />}
     </div>
   );
 }
