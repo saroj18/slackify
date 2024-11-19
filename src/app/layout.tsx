@@ -4,8 +4,8 @@ import "./globals.css";
 import { AuthProvider } from "@/components/authProvider";
 import { Toaster } from "@/components/ui/toaster";
 import "./prosemirror.css";
-import Provider from "./provider";
 import EditorProvider from "./provider";
+import { Poppins } from "next/font/google";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -16,6 +16,13 @@ const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"], // Optional subsets
+  weight: ["400", "700"], // Specify weights as needed
+  style: ["normal", "italic"], // Specify styles if needed
+  display: "swap", // Improves font loading performance
 });
 
 export const metadata: Metadata = {
@@ -30,9 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${poppins.className}  antialiased`}>
         <AuthProvider>
           <EditorProvider>{children}</EditorProvider>
         </AuthProvider>

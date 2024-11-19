@@ -7,6 +7,7 @@ interface MessageCardProps {
   senderImage?: string;
   message?: string;
   align: string;
+  time: string;
 }
 
 export default function MessageCard({
@@ -14,10 +15,12 @@ export default function MessageCard({
   senderImage = "/placeholder.svg?height=40&width=40",
   message = "Hello! This is a sample message.",
   align,
+  time,
 }: MessageCardProps) {
   const sanitizedHtml = DOMPurify.sanitize(message);
   return (
     <Card
+      title={new Date(time).toLocaleTimeString()}
       className={`w-full max-w-md ${
         align == "left" ? "self-start" : "self-end"
       } `}

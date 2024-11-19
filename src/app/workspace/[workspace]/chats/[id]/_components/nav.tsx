@@ -3,6 +3,7 @@ import { NavList } from "../../../channel/[id]/constant/constant";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type NavType = {
   state: string;
@@ -38,7 +39,15 @@ export default function Navbar({ state, setState }: NavType) {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <h1 className="font-bold text-2xl">
-          {user ? (user.id == data?.user.id ? "You" : user.name) : "loading.."}
+          {user ? (
+            user.id == data?.user.id ? (
+              "You"
+            ) : (
+              user.name
+            )
+          ) : (
+            <Skeleton className="h-[20px] w-[200px]" />
+          )}
         </h1>
       </div>
       <div className="flex gap-x-5 my-4">

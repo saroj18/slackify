@@ -34,6 +34,7 @@ export default function MessagePage({ messageList }: { messageList: any }) {
                 message={item.message}
                 align={item.senderId == data?.user.id ? "right" : "left"}
                 key={index}
+                time={item?.createdAt}
               />
             )
         )}

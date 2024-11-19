@@ -34,13 +34,14 @@ export default function TextEditor({
       console.log("data");
     });
   }, []);
-  
+
   return (
     <div className="w-full h-[100px] ">
       <FroalaEditorComponent
         onModelChange={setValue}
         config={config}
         tag="textarea"
+        model={value}
       />
     </div>
   );

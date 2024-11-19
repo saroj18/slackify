@@ -28,6 +28,7 @@ export const GET = asyncHandler(async (req: NextRequest, { params }) => {
           name: true,
         },
       },
+      
     },
   });
 

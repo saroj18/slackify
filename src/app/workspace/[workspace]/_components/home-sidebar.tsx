@@ -6,7 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight, Plus, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronRight, Plus, User, UserPlus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Dialog,
@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import env from "@/utils/env";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HomeSideBar() {
   const [isOpen, setIsOpen] = React.useState({
@@ -73,7 +74,6 @@ export default function HomeSideBar() {
         setUserLoading(true);
         const res = await fetch(`/api/workspaceuser/${id.workspace}`);
         const data = await res.json();
-        console.log(data);
         setUser(data.data);
         setUserLoading(false);
       } catch (error) {
@@ -147,12 +147,14 @@ export default function HomeSideBar() {
   return (
     <div className="w-full max-w-xs p-5 border-2 space-y-2">
       <Dialog onOpenChange={() => setUserList([])}>
-        <DialogTrigger asChild>
-          <p className="flex cursor-pointer items-center gap-x-1 font-mono my-3">
-            <UserPlus strokeWidth={1} className="size-5 text-gray-600" />
-            Add People
-          </p>
-        </DialogTrigger>
+        {workspace?.createdBy == data?.user.id && (
+          <DialogTrigger asChild>
+            <p className="flex cursor-pointer items-center gap-x-1  my-3">
+              <UserPlus strokeWidth={1} className="size-5 text-gray-600" />
+              Add People
+            </p>
+          </DialogTrigger>
+        )}
         <DialogContent className="max-w-xl">
           <DialogHeader>
             <DialogTitle>Add Users on Your Channel.</DialogTitle>
@@ -209,36 +211,42 @@ export default function HomeSideBar() {
           className="flex items-center transition-all duration-100 "
         >
           {!isOpen.channel ? <ChevronRight /> : <ChevronDown />}
-          <p className="font-semibold text-lg">Channels</p>
+          <p className=" text-lg">Channels</p>
         </CollapsibleTrigger>
         <div className="pl-4">
-          {channelLoading ? (
-            <p>loading..</p>
-          ) : (
-            workspace?.channels?.map((channel: any) => (
-              <CollapsibleContent
-                key={channel.id}
-                onClick={() =>
-                  router.push(
-                    `/workspace/${workspace.id}/channel/${channel.id}`
-                  )
-                }
-                className="font-mono cursor-pointer"
-              >
-                # {channel.name}
-              </CollapsibleContent>
-            ))
-          )}
+          {channelLoading
+            ? Array(2)
+                .fill(null)
+                .map((_, index) => (
+                  <Skeleton key={index} className="h-[20px] w-[170px] my-1" />
+                ))
+            : workspace?.channels?.map((channel: any) => (
+                <CollapsibleContent
+                  key={channel.id}
+                  onClick={() =>
+                    router.push(
+                      `/workspace/${workspace.id}/channel/${channel.id}`
+                    )
+                  }
+                  className={` cursor-pointer my-1 text-lg ${
+                    channel.id == id.id && "text-blue-500"
+                  }`}
+                >
+                  # {channel.name}
+                </CollapsibleContent>
+              ))}
         </div>
       </Collapsible>
 
       <Dialog>
-        <DialogTrigger asChild>
-          <p className="flex cursor-pointer items-center gap-x-1">
-            <Plus strokeWidth={1} className="size-5 text-gray-600" />
-            Create Channel
-          </p>
-        </DialogTrigger>
+        {workspace?.createdBy == data?.user.id && (
+          <DialogTrigger asChild>
+            <p className="flex cursor-pointer items-center gap-x-1">
+              <Plus strokeWidth={1} className="size-5 text-gray-600" />
+              Create Channel
+            </p>
+          </DialogTrigger>
+        )}
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Create a Channel.</DialogTitle>
@@ -271,31 +279,36 @@ export default function HomeSideBar() {
         </DialogContent>
       </Dialog>
 
-      <Collapsible>
+      <Collapsible defaultOpen={true}>
         <CollapsibleTrigger
           onClick={() => clickHandler("chat")}
           className="flex items-center "
         >
           {!isOpen.chat ? <ChevronRight /> : <ChevronDown />}
-          <p className="font-semibold text-lg">Direct Chat</p>
+          <p className=" text-lg">Direct Chat</p>
         </CollapsibleTrigger>
         <div className="pl-4">
-          {userLoading ? (
-            <p>loading..</p>
-          ) : (
-            user?.workspaceUsers?.length > 0 &&
-            user.workspaceUsers.map((u: any) => (
-              <CollapsibleContent
-                onClick={() =>
-                  router.push(`/workspace/${id.workspace}/chats/${u.id}`)
-                }
-                className="font-mono cursor-pointer"
-                key={u.id}
-              >
-                {u.id == data?.user.id ? "You" : u.name}
-              </CollapsibleContent>
-            ))
-          )}
+          {userLoading
+            ? Array(2)
+                .fill(null)
+                .map((_, index) => (
+                  <Skeleton key={index} className="h-[20px] w-[170px] my-1" />
+                ))
+            : user?.workspaceUsers?.length > 0 &&
+              user.workspaceUsers.map((u: any) => (
+                <CollapsibleContent
+                  onClick={() =>
+                    router.push(`/workspace/${id.workspace}/chats/${u.id}`)
+                  }
+                  className={` cursor-pointer flex items-center gap-x-2 my-1 text-lg ${
+                    id.id == u.id && "text-blue-500"
+                  }`}
+                  key={u.id}
+                >
+                  <User size={20} className="opacity-40" />{" "}
+                  <span>{u.id == data?.user.id ? "You" : u.name}</span>
+                </CollapsibleContent>
+              ))}
         </div>
       </Collapsible>
     </div>

@@ -7,6 +7,7 @@ import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProjectCard() {
   const [workspace, setWorkspace] = React.useState<any>([]);
@@ -40,7 +41,10 @@ export default function ProjectCard() {
         </h1>
       )}
       {loading ? (
-        <p>Loading...</p>
+        <>
+          <Skeleton className="w-full my-2 h-[100px]" />
+          <Skeleton className="w-full my-2 h-[100px]" />
+        </>
       ) : workspace?.length == 0 ? (
         <p>No workspace found</p>
       ) : (

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import useLocalStorage from "@/hooks/use-local-storage";
 import { Plus, Bell, Trash } from "lucide-react";
 import Link from "next/link";
@@ -62,7 +63,7 @@ export default function WorkSpaceSwitcher() {
               {currentWorkspace?.name[0]?.toUpperCase()}
             </div>
             {loading ? (
-              <p>loading</p>
+              <Skeleton className="h-[50px] w-full bg-slate-400" />
             ) : (
               <div>
                 <div className="font-medium">{currentWorkspace?.name}</div>
@@ -90,7 +91,7 @@ export default function WorkSpaceSwitcher() {
           {/* Other Workspaces */}
           <div className="space-y-2">
             {loading ? (
-              <p>loading....</p>
+              <Skeleton className="h-[50px] w-full bg-slate-400" />
             ) : (
               workspace?.length > 0 &&
               workspace.map((ws: any) => {
@@ -104,7 +105,7 @@ export default function WorkSpaceSwitcher() {
                   >
                     <Link
                       href={`/workspace/${ws.id}`}
-                      className="flex gap-3 cursor-pointer"
+                      className="flex gap-3 cursor-pointer hover:text-slate-200 hover:bg-slate-700/50"
                     >
                       <div className="flex h-9 w-9 items-center justify-center rounded bg-purple-600 font-semibold">
                         {ws.name[0].toUpperCase()}
@@ -116,7 +117,7 @@ export default function WorkSpaceSwitcher() {
                     </Link>
                     <Trash
                       onClick={() => deleteWorkspaceHandler(ws.id)}
-                      className=" text-slate-400 cursor-pointer"
+                      className=" text-slate-400 cursor-pointer hover:text-slate-200 hover:bg-slate-700/50"
                     />
                   </div>
                 );
