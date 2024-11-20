@@ -89,7 +89,7 @@ const CanvasEditor = ({
     const newContent = window.localStorage.getItem(novelLocalStorageKey);
 
     setSaveStatus("Saved");
-  }, 500);
+  }, 300);
 
   useEffect(() => {
     const content = window.localStorage.getItem(novelLocalStorageKey);
