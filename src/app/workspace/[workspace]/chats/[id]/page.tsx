@@ -7,6 +7,8 @@ import CanvasEditor from "@/app/_components/canvas-editor/advanced-editor";
 import WhiteBoard from "@/app/_components/whiteboard/whiteboard";
 import ChatPage from "./pages/chat-page";
 import { useParams } from "next/navigation";
+import CanvasPage from "./pages/canvas-page";
+import CanvasPreviewPage from "./pages/canvas-preview";
 
 export default function page() {
   const [state, setState] = useState("Message");
@@ -21,17 +23,8 @@ export default function page() {
       {/* {state == "Canvas" && (
         <Canvas localStorageKey="chatsCanvas" setContent={setContent} content={content} />
       )} */}
-      {state == "Canvas" && (
-        <CanvasEditor
-          setInitialContent={setInitialContent}
-          initialContent={initialContent}
-          setNewChanges={setNewChanges}
-          novelLocalStorageKey="novel-content-chat"
-        />
-      )}
-      {state == "Canvas Preview" && (
-        <CanvasPreview content={content as string} />
-      )}
+      {state == "Canvas" && <CanvasPage />}
+      {state == "Canvas Preview" && <CanvasPreviewPage />}
       {state == "WhiteBoard" && <WhiteBoard workspace={workspace} />}
     </div>
   );

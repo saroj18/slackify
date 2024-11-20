@@ -13,8 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
   id         String      @id @default(uuid())
   email      String      @unique
@@ -25,7 +23,8 @@ model User {
   workspaceUsers Workspace[] @relation("workspaceuser")
   sentMessage      Message[] @relation("sentMessage")
   receivedMessage Message[] @relation("receivedMessage")
-  canvas Canvas?
+  canvas Canvas[]
+  canvasReceiver Canvas? @relation("canvasreceiver")
 }
 
 model Workspace {
@@ -77,8 +76,11 @@ model Canvas{
   workspaceId String?
   workspace Workspace? @relation(fields: [workspaceId], references: [id],onDelete: Cascade)
   content Json
-  createdBy String? @unique
+  createdBy String? 
   createdByUser User? @relation(fields: [createdBy], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  receiver String? @unique
+  receiverUser User? @relation("canvasreceiver",fields: [receiver],references: [id])
+  isPublic Boolean @default(false)
 }
