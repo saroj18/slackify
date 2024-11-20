@@ -28,7 +28,7 @@ const components: Required<TLUiComponents> = {
   CursorChatBubble: null,
 };
 
-export default function WhiteBoard({ workspace }: { workspace: any }) {
+export default function WhiteBoard({ workspace }: { workspace?: any }) {
   const { id } = useParams();
   const store = useSyncDemo({ roomId: `channel-${id}` });
   const { data } = useSession();

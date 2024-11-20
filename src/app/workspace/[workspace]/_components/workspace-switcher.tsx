@@ -66,10 +66,16 @@ export default function WorkSpaceSwitcher() {
               <Skeleton className="h-[50px] w-full bg-slate-400" />
             ) : (
               <div>
-                <div className="font-medium">{currentWorkspace?.name}</div>
-                <div className="text-sm text-slate-400">
-                  -{currentWorkspace?.id}
-                </div>
+                {!currentWorkspace ? (
+                  <p>workspace not selected</p>
+                ) : (
+                  <>
+                    <div className="font-medium">{currentWorkspace?.name}</div>
+                    <div className="text-sm text-slate-400">
+                      -{currentWorkspace?.id}
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>

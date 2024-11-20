@@ -58,7 +58,7 @@ export default function SideBtnView() {
         <IconAvatar
           className={sideBtn === "Board" ? "text-blue-500" : ""}
           onClick={() => {
-            router.push("/workspace/whiteboard"), setSideBtn("Board");
+            router.push("/user/whiteboard"), setSideBtn("Board");
           }}
           title="Board"
         >

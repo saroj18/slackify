@@ -4,7 +4,7 @@ import CanvasPreview from "@/app/_components/canvas-editor/canvas-preview-page";
 import { PUSHER_CLIENT } from "@/utils/pusher";
 import { useSession } from "next-auth/react";
 import { useParams, useSearchParams } from "next/navigation";
-import { JSONContent } from "novel";
+import { EditorRoot, JSONContent } from "novel";
 import React, { useEffect, useState } from "react";
 
 export default function LiveCanvasPreviewPage() {
@@ -49,5 +49,9 @@ export default function LiveCanvasPreviewPage() {
     };
   }, []);
 
-  return <CanvasPreview content={content as JSONContent} />;
+  return (
+    <EditorRoot>
+      <CanvasPreview content={content as JSONContent} />;
+    </EditorRoot>
+  );
 }
