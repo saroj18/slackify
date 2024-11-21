@@ -30,10 +30,12 @@ export const POST = asyncHandler(async (req, { params }) => {
   if (findCanvas) {
     await prisma.canvas.update({
       where: {
+        id: findCanvas.id,
         createdBy: userId,
       },
       data: {
         content: initialContent,
+        isPublic: true,
       },
     });
 
@@ -51,6 +53,7 @@ export const POST = asyncHandler(async (req, { params }) => {
     data: {
       content: initialContent,
       createdBy: userId,
+      isPublic: true,
     },
   });
 

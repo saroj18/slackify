@@ -9,6 +9,7 @@ import ChatPage from "./pages/chat-page";
 import { useParams } from "next/navigation";
 import CanvasPage from "./pages/canvas-page";
 import CanvasPreviewPage from "./pages/canvas-preview";
+import WhiteBoardPage from "./pages/whiteboard-page";
 
 export default function page() {
   const [state, setState] = useState("Message");
@@ -25,7 +26,7 @@ export default function page() {
       )} */}
       {state == "Canvas" && <CanvasPage />}
       {state == "Canvas Preview" && <CanvasPreviewPage />}
-      {state == "WhiteBoard" && <WhiteBoard workspace={workspace} />}
+      {state == "WhiteBoard" && <WhiteBoardPage />}
     </div>
   );
 }

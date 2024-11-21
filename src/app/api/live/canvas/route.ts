@@ -25,14 +25,10 @@ export const POST = asyncHandler(async (req, { params }) => {
     throw new ApiError("user not found");
   }
 
-await PUSHER_SERVER.trigger(
-    `public-canvas-${createdBy}`,
-    "sent-canvas",
-    {
-      createdBy: findUser.id,
-      newChanges,
-    }
-  );
+  await PUSHER_SERVER.trigger(`public-canvas-${createdBy}`, "sent-canvas", {
+    createdBy: findUser.id,
+    newChanges,
+  });
 
   return NextResponse.json({ message: "", success: true }, { status: 200 });
 });
@@ -57,6 +53,7 @@ export const GET = asyncHandler(async (req) => {
   const findCanvas = await prisma.canvas.findFirst({
     where: {
       createdBy,
+      isPublic: true,
     },
   });
 

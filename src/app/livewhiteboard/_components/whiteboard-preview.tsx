@@ -33,10 +33,7 @@ export default function WhiteBoardPage() {
   const store = useSyncDemo({ roomId: `whiteboard-${params.get("id")}` });
 
   return (
-    <div
-      aria-readonly
-      className={`tldraw__editor relative h-[800px] border-2 border-red-500  `}
-    >
+    <div aria-readonly className={`tldraw__editor relative h-[800px]`}>
       <Tldraw components={components} store={store} />
       <div
         style={{
