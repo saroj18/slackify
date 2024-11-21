@@ -8,7 +8,7 @@ export default function ChannelLayout({
 }) {
   return (
     <div className="flex w-full">
-      <HomeSideBar />
+      {/* <HomeSideBar /> */}
       {children}
     </div>
   );

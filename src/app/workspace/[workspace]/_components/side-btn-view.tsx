@@ -10,15 +10,18 @@ import {
 import WorkSpaceSwitcher from "./workspace-switcher";
 import { HomeIcon, Image, PenIcon, Plus } from "lucide-react";
 import IconAvatar from "./icon-avatar";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import useLocalStorage from "@/hooks/use-local-storage";
 
 export default function SideBtnView() {
-  const [sideBtn, setSideBtn] = React.useState("Home");
+  const [sideBtn, setSideBtn] = React.useState("");
   const router = useRouter();
   const { data, status } = useSession();
+  const params = window.location.pathname.split("/");
+  console.log(params);
   return (
     <div className="flex flex-col justify-between items-center py-3 h-screen  w-full max-w-[70px]">
       <div>
@@ -38,15 +41,20 @@ export default function SideBtnView() {
         </Popover>
 
         <IconAvatar
-          className={sideBtn === "Home" ? "bg-blue-300" : ""}
-          onClick={() => router.push("/workspace")}
+          className={params.includes("workspace") ? "bg-blue-200" : ""}
+          onClick={() => {
+            router.push(
+              `/workspace/${localStorage.getItem("currentWorkspace")}`
+            ),
+              setSideBtn("Home");
+          }}
           title="Home"
         >
           <HomeIcon strokeWidth={1} className="w-8 h-8 text-gray-600" />
         </IconAvatar>
 
         <IconAvatar
-          className={sideBtn === "Canvas" ? "text-blue-500" : ""}
+          className={params.includes("canvas") ? "bg-blue-200" : ""}
           onClick={() => {
             router.push("/user/canvas"), setSideBtn("Canvas");
           }}
@@ -56,7 +64,7 @@ export default function SideBtnView() {
         </IconAvatar>
 
         <IconAvatar
-          className={sideBtn === "Board" ? "text-blue-500" : ""}
+          className={params.includes("whiteboard") ? "bg-blue-200" : ""}
           onClick={() => {
             router.push("/user/whiteboard"), setSideBtn("Board");
           }}

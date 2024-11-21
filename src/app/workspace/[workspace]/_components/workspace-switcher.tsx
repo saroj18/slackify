@@ -105,6 +105,7 @@ export default function WorkSpaceSwitcher() {
                   <div
                     onClick={() => {
                       setCurrentWorkspace(ws);
+                      localStorage.setItem("currentWorkspace", ws?.id);
                     }}
                     key={ws.id}
                     className="flex items-center justify-between "

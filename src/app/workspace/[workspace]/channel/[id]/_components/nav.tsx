@@ -35,26 +35,35 @@ export default function Navbar({ setState, state }: NavType) {
 
   return (
     <div className=" h-24 shadow-md p-2 mb-5">
-      <h1 className="font-bold text-2xl flex items-center">
-        #{" "}
+      <h1 className="font-bold text-2xl flex gap-x-2 items-center">
+        # {"  "}
         {loading ? <Skeleton className="h-[20px] w-[200px]" /> : channel?.name}
       </h1>
       <div className="flex gap-x-5 my-4">
-        {NavList.map((item) => {
-          return item.name == "Canvas" &&
-            channel?.workspace?.createdBy !== data?.user.id ? null : (
-            <div
-              onClick={() => setState(item.name)}
-              key={item.name}
-              className={`flex items-center gap-x-1 cursor-pointer ${
-                state == item.name && "text-blue-500"
-              } `}
-            >
-              <span>{item.icon}</span>
-              <span>{item.name}</span>
-            </div>
-          );
-        })}
+        {loading ? (
+          <div className="flex items-center gap-x-2">
+            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-[20px] w-[100px]" />
+          </div>
+        ) : (
+          NavList.map((item) => {
+            return item.name == "Canvas" &&
+              channel?.workspace?.createdBy !== data?.user.id ? null : (
+              <div
+                onClick={() => setState(item.name)}
+                key={item.name}
+                className={`flex items-center gap-x-1 cursor-pointer ${
+                  state == item.name && "text-blue-500"
+                } `}
+              >
+                <span>{item.icon}</span>
+                <span>{item.name}</span>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

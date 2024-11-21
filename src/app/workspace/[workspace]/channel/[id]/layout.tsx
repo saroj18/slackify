@@ -7,8 +7,8 @@ export default function ChannelLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex w-full">
-      <HomeSideBar />
+    <div className="w-full">
+      {/* <HomeSideBar /> */}
       {children}
     </div>
   );

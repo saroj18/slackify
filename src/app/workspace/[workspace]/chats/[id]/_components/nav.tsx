@@ -51,20 +51,29 @@ export default function Navbar({ state, setState }: NavType) {
         </h1>
       </div>
       <div className="flex gap-x-5 my-4">
-        {NavList.map((item) => {
-          return (
-            <div
-              onClick={() => setState(item.name)}
-              key={item.name}
-              className={`flex items-center gap-x-1 cursor-pointer ${
-                state == item.name && "text-blue-500"
-              }`}
-            >
-              <span>{item.icon}</span>
-              <span>{item.name}</span>
-            </div>
-          );
-        })}
+        {!user ? (
+          <div className="flex items-center gap-x-2">
+            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-[20px] w-[100px]" />
+            <Skeleton className="h-[20px] w-[100px]" />
+          </div>
+        ) : (
+          NavList.map((item) => {
+            return (
+              <div
+                onClick={() => setState(item.name)}
+                key={item.name}
+                className={`flex items-center gap-x-1 cursor-pointer ${
+                  state == item.name && "text-blue-500"
+                }`}
+              >
+                <span>{item.icon}</span>
+                <span>{item.name}</span>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

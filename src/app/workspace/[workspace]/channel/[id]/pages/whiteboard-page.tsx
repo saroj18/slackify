@@ -33,7 +33,7 @@ const viewerComponent: TLUiComponents = {
 
 export default function WhiteBoardPage() {
   const { workspace } = useParams();
-  const store = useSyncDemo({ roomId: `chat-whiteboard-${workspace}` });
+  const store = useSyncDemo({ roomId: `channel-whiteboard-${workspace}` });
   const { workspaceData } = getWorkspace(workspace as string);
   const { data } = useSession();
 
