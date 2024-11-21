@@ -38,16 +38,19 @@ export const POST = asyncHandler(async (req, { params }) => {
       workspaceId,
     },
   });
+  console.log("findCanvas", findCanvas);
 
   if (findCanvas) {
     const updateCanvas = await prisma.canvas.update({
       where: {
         id: findCanvas.id,
+        receiver,
       },
       data: {
         content: initialContent,
       },
     });
+
     if (!updateCanvas) {
       throw new ApiError("failed to update canvas");
     }
@@ -85,6 +88,9 @@ export const GET = asyncHandler(async (req, { params }) => {
   const canvasCreator = params?.id;
   const workspace = req.nextUrl.searchParams.get("workspace");
   const receiver = req.nextUrl.searchParams.get("receiver");
+  console.log("workspace>>", workspace);
+  console.log("receiver>>", receiver);
+  console.log(req.nextUrl.searchParams);
 
   if (!canvasCreator) {
     throw new ApiError("provide canvasCreator id first");

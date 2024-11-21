@@ -39,7 +39,7 @@ export default function CanvasPreviewPage() {
 
     const getContentFromServer = async () => {
       const resp = await fetch(
-        `/api/canvas/personal/${id}/?workspace=${workspace}?receiver=${userInfo?.user.id}`
+        `/api/canvas/personal/${id}/?workspace=${workspace}&receiver=${userInfo?.user.id}`
       );
       const data = await resp.json();
       setContent(data.data?.content);
