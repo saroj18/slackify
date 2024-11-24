@@ -14,36 +14,40 @@ import { Editor } from "@tiptap/core";
 
 export const TextButtons = () => {
   const { editor } = useEditor();
-  if (!editor) return null;
+
+  if (!editor) {
+    return null;
+  }
+
   const items: SelectorItem[] = [
     {
       name: "bold",
-      isActive: (editor) => editor.isActive("bold"),
-      command: (editor) => editor.chain().focus().toggleBold().run(),
+      isActive: (editor) => editor?.isActive("bold") as boolean,
+      command: (editor) => editor?.chain().focus().toggleBold().run(),
       icon: BoldIcon,
     },
     {
       name: "italic",
-      isActive: (editor) => editor.isActive("italic"),
-      command: (editor) => editor.chain().focus().toggleItalic().run(),
+      isActive: (editor) => editor?.isActive("italic") as boolean,
+      command: (editor) => editor?.chain().focus().toggleItalic().run(),
       icon: ItalicIcon,
     },
     {
       name: "underline",
-      isActive: (editor) => editor.isActive("underline"),
-      command: (editor) => editor.chain().focus().toggleUnderline().run(),
+      isActive: (editor) => editor?.isActive("underline") as boolean,
+      command: (editor) => editor?.chain().focus().toggleUnderline().run(),
       icon: UnderlineIcon,
     },
     {
       name: "strike",
-      isActive: (editor) => editor.isActive("strike"),
-      command: (editor) => editor.chain().focus().toggleStrike().run(),
+      isActive: (editor) => editor?.isActive("strike") as boolean,
+      command: (editor) => editor?.chain().focus().toggleStrike().run(),
       icon: StrikethroughIcon,
     },
     {
       name: "code",
-      isActive: (editor) => editor.isActive("code"),
-      command: (editor) => editor.chain().focus().toggleCode().run(),
+      isActive: (editor) => editor?.isActive("code") as boolean,
+      command: (editor) => editor?.chain().focus().toggleCode().run(),
       icon: CodeIcon,
     },
   ];
@@ -52,7 +56,7 @@ export const TextButtons = () => {
       {items.map((item) => (
         <EditorBubbleItem
           key={item.name}
-          onSelect={(editor:Editor) => {
+          onSelect={(editor: Editor) => {
             item.command(editor);
           }}
         >

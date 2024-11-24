@@ -1,6 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import LiveCanvasPreviewPage from "./_components/canvas-page";
 
 export default function page() {
-  return <LiveCanvasPreviewPage />;
+  return (
+    <Suspense fallback={<p>loading</p>}>
+      <LiveCanvasPreviewPage />
+    </Suspense>
+  );
 }

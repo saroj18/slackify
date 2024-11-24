@@ -9,7 +9,8 @@
     "lint": "next lint",
     "push": "pnpx prisma db push",
     "generate": "pnpx prisma generate",
-    "studio": "pnpx prisma studio"
+    "studio": "pnpx prisma studio",
+    "postinstall": "prisma generate && prisma migrate deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

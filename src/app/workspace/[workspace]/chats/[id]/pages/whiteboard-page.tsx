@@ -1,9 +1,8 @@
 "use client";
 
 import { useSyncDemo } from "@tldraw/sync";
-import { useParams, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { Tldraw, TLUiComponents, useEditor } from "tldraw";
+import { useParams,  } from "next/navigation";
+import { Tldraw, } from "tldraw";
 import "tldraw/tldraw.css";
 
 // const components: TLUiComponents = {

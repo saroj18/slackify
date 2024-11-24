@@ -33,7 +33,7 @@ export default function ChatPage() {
 
     return () => {
       chats.unbind("message");
-      PUSHER_CLIENT.unsubscribe(`chat-${id}`);
+      PUSHER_CLIENT.unsubscribe(`chat-${data?.user.id}`);
     };
   }, [id]);
 

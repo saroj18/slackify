@@ -3,7 +3,7 @@
 import { EditorBubble, useEditor } from "novel";
 import { Fragment, type ReactNode, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { AISelector } from "./ai-selectors";
+// import { AISelector } from "./ai-selectors";
 import { removeAIHighlight } from "novel/extensions";
 
 interface GenerativeMenuSwitchProps {
@@ -17,6 +17,9 @@ const GenerativeMenuSwitch = ({
   onOpenChange,
 }: GenerativeMenuSwitchProps) => {
   const { editor } = useEditor();
+  if (!editor) {
+    return <p>editor not found</p>;
+  }
 
   useEffect(() => {
     if (!open) removeAIHighlight(editor);
@@ -32,7 +35,7 @@ const GenerativeMenuSwitch = ({
       }}
       className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border border-muted bg-background shadow-xl"
     >
-      {open && <AISelector open={open} onOpenChange={onOpenChange} />}
+      {/* {open && <AISelector open={open} onOpenChange={onOpenChange} />} */}
       {!open && (
         <Fragment>
           <Button

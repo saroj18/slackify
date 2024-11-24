@@ -3,7 +3,7 @@
 import  useWorkspace  from "@/api_data/get_workspace";
 import { useSyncDemo } from "@tldraw/sync";
 import { useSession } from "next-auth/react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { Tldraw, TLUiComponents, useEditor } from "tldraw";
 import "tldraw/tldraw.css";

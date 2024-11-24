@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 
 export default function page() {
   const { data, status } = useSession();
@@ -24,10 +24,12 @@ export default function page() {
   };
 
   return (
-    <div className="w-full">
-      <Button onClick={clickHandler} className="w-fit mx-auto">
-        Accept Invition
-      </Button>
-    </div>
+    <Suspense fallback={<p>loading</p>}>
+      <div className="w-full">
+        <Button onClick={clickHandler} className="w-fit mx-auto">
+          Accept Invition
+        </Button>
+      </div>
+    </Suspense>
   );
 }

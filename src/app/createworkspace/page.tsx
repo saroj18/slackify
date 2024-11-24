@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import WorkSpaceName from "./_components/workspace-name";
 import { Button } from "@/components/ui/button";
 import YourName from "./_components/your-name";
@@ -77,7 +77,9 @@ export default function page() {
         <YourName setWorkspace={setWorkspace} workspace={workspace} />
       )}
       {step == 3 && (
-        <Invite setWorkspace={setWorkspace} workspace={workspace} />
+        <Suspense fallback={<p>loading</p>}>
+          <Invite setWorkspace={setWorkspace} workspace={workspace} />
+        </Suspense>
       )}
       {step == 4 && (
         <ProjectName setWorkspace={setWorkspace} workspace={workspace} />

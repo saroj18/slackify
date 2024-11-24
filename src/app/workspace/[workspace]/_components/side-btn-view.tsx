@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -18,10 +18,15 @@ import useLocalStorage from "@/hooks/use-local-storage";
 
 export default function SideBtnView() {
   const [sideBtn, setSideBtn] = React.useState("");
+  const [params, setParams] = useState<string[]>([]);
   const router = useRouter();
   const { data, status } = useSession();
-  const params = window.location.pathname.split("/");
-  console.log(params);
+
+  useEffect(() => {
+    const par = window.location.pathname.split("/");
+    console.log(par);
+    setParams(par);
+  }, []);
   return (
     <div className="flex flex-col justify-between items-center py-3 h-screen  w-full max-w-[70px]">
       <div>
