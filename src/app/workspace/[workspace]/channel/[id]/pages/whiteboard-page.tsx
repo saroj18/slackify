@@ -1,6 +1,6 @@
 "use client";
 
-import { getWorkspace } from "@/api_data/get_workspace";
+import  useWorkspace  from "@/api_data/get_workspace";
 import { useSyncDemo } from "@tldraw/sync";
 import { useSession } from "next-auth/react";
 import { useParams, useSearchParams } from "next/navigation";
@@ -34,7 +34,7 @@ const viewerComponent: TLUiComponents = {
 export default function WhiteBoardPage() {
   const { workspace } = useParams();
   const store = useSyncDemo({ roomId: `channel-whiteboard-${workspace}` });
-  const { workspaceData } = getWorkspace(workspace as string);
+  const { workspaceData } = useWorkspace(workspace as string);
   const { data } = useSession();
 
   return (

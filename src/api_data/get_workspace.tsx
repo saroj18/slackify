@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useWorkspace = (workspaceId: string) => {
+const useWorkspace = (workspaceId: string) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [workspaceData, setWorkspaceData] = useState<any>(null);
@@ -24,3 +24,5 @@ export const useWorkspace = (workspaceId: string) => {
 
   return { loading, error, workspaceData };
 };
+
+export default useWorkspace;

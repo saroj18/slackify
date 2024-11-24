@@ -1,4 +1,8 @@
-import { CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command";
+import {
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { Check, TextQuote, TrashIcon } from "lucide-react";
 //@ts-ignore
 import { useEditor } from "novel";
@@ -11,6 +15,9 @@ const AICompletionCommands = ({
   onDiscard: () => void;
 }) => {
   const { editor } = useEditor();
+  if (!editor) {
+    return <p>editor not found</p>;
+  }
   return (
     <>
       <CommandGroup>
