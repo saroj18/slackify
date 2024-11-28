@@ -1,6 +1,6 @@
 "use client";
 
-import  useWorkspace  from "@/api_data/get_workspace";
+import useWorkspace from "@/api_data/get_workspace";
 import { useSyncDemo } from "@tldraw/sync";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -11,14 +11,14 @@ import "tldraw/tldraw.css";
 const creatorComponent: TLUiComponents = {};
 const viewerComponent: TLUiComponents = {
   ContextMenu: null,
-  ActionsMenu: null,
+  // ActionsMenu: null,
   HelpMenu: null,
   //   ZoomMenu: null,
   MainMenu: null,
   //   Minimap: null,
   StylePanel: null,
   PageMenu: null,
-  //   NavigationPanel: null,
+  // NavigationPanel: null,
   Toolbar: null,
   KeyboardShortcutsDialog: null,
   QuickActions: null,
@@ -32,8 +32,10 @@ const viewerComponent: TLUiComponents = {
 };
 
 export default function WhiteBoardPage() {
-  const { workspace } = useParams();
-  const store = useSyncDemo({ roomId: `channel-whiteboard-${workspace}` });
+  const { workspace, id } = useParams();
+  const store = useSyncDemo({
+    roomId: `channel-whiteboard-${workspace}-${id}`,
+  });
   const { workspaceData } = useWorkspace(workspace as string);
   const { data } = useSession();
 

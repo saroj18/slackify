@@ -75,41 +75,33 @@ export const POST = asyncHandler(async (req: NextRequest) => {
   );
 });
 
-export const GET = asyncHandler(async (req: NextRequest, { searchParams }) => {
+export const GET = asyncHandler(async (req: NextRequest) => {
   const { id } = await getUser<UserType>();
-  const workspaceId = searchParams?.get("workspaceId");
+  const { searchParams } = new URL(req.url);
+  const workspaceId = searchParams.get("workspaceId");
+  const receiverId = searchParams.get("receiver");
+  console.log("workspaceId", workspaceId);
+  console.log("receiverId", receiverId);
+
+  if (!workspaceId || !receiverId) {
+    throw new ApiError("please provide required id!!");
+  }
 
   const messages = await prisma.message.findMany({
     where: {
-      AND: [
+      workspace: {
+        id: workspaceId as string,
+      },
+      OR: [
         {
-          workspace: {
-            id: workspaceId as string,
-          },
+          senderId: id,
+          receiverId,
+          type: "personalChat",
         },
         {
-          OR: [
-            {
-              AND: [
-                {
-                  senderId: id,
-                },
-                {
-                  type: "personalChat",
-                },
-              ],
-            },
-            {
-              AND: [
-                {
-                  receiverId: id,
-                },
-                {
-                  type: "personalChat",
-                },
-              ],
-            },
-          ],
+          senderId: receiverId as string,
+          receiverId: id,
+          type: "personalChat",
         },
       ],
     },

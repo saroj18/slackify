@@ -1,6 +1,6 @@
 import React from "react";
 //@ts-ignore
-import { EditorContent, EditorRoot, useEditor } from "novel";
+import { EditorContent, EditorRoot,  } from "novel";
 import { defaultExtensions } from "@/app/_components/canvas-editor/extension";
 
 export default function CanvasPreview({ content }: { content: any }) {

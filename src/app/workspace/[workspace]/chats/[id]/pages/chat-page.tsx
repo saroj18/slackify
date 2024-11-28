@@ -42,7 +42,7 @@ export default function ChatPage() {
       try {
         setLoading(true);
         const res = await fetch(
-          `/api/message/personal?workspaceId=${workspace}`
+          `/api/message/personal?workspaceId=${workspace}&receiver=${id}`
         );
         const data = await res.json();
         setMessageList(data.data);

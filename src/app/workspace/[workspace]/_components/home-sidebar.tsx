@@ -309,7 +309,9 @@ export default function HomeSideBar() {
                     key={u.id}
                   >
                     <User size={20} className="opacity-40" />{" "}
-                    <span>{u.id == data?.user.id ? "You" : u.name}</span>
+                    <span aria-disabled={u.id == data?.user.id ? true : false}>
+                      {u.id == data?.user.id ? "You" : u.name}
+                    </span>
                   </CollapsibleContent>
                 ))}
           </div>

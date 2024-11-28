@@ -48,6 +48,7 @@ export const POST = asyncHandler(async (req, { params }) => {
       },
       data: {
         content: initialContent,
+        isPublic: false,
       },
     });
 
@@ -71,6 +72,7 @@ export const POST = asyncHandler(async (req, { params }) => {
       workspaceId: workspaceId,
       createdBy: id,
       receiver,
+      isPublic: false,
     },
   });
 
@@ -88,8 +90,7 @@ export const GET = asyncHandler(async (req, { params }) => {
   const canvasCreator = params?.id;
   const workspace = req.nextUrl.searchParams.get("workspace");
   const receiver = req.nextUrl.searchParams.get("receiver");
-  console.log("workspace>>", workspace);
-  console.log("receiver>>", receiver);
+
   console.log(req.nextUrl.searchParams);
 
   if (!canvasCreator) {
@@ -111,6 +112,7 @@ export const GET = asyncHandler(async (req, { params }) => {
       createdBy: canvasCreator,
       workspaceId: workspace,
       receiver,
+      isPublic: false,
     },
   });
 
