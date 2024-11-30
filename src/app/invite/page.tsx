@@ -2,34 +2,39 @@
 
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect } from "react";
 
-export default function page() {
-  const { data, status } = useSession();
-  const router = useRouter();
+// Separate the logic dependent on useSearchParams
+function InviteHandler() {
   const params = useSearchParams();
   const workspaceId = params.get("workspaceId");
-  console.log(workspaceId);
+  const { data, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    console.log(status);
-    if (!data && status == "unauthenticated") {
+    if (!data && status === "unauthenticated") {
       router.push("/auth/signin");
     }
-  }, [data]);
+  }, [data, status]);
 
   const clickHandler = async () => {
     await fetch(`api/invite/${data?.user.id}?workspaceId=${workspaceId}`);
   };
 
   return (
-    <Suspense fallback={<p>loading</p>}>
-      <div className="w-full">
-        <Button onClick={clickHandler} className="w-fit mx-auto">
-          Accept Invition
-        </Button>
-      </div>
+    <div className="w-full">
+      <Button onClick={clickHandler} className="w-fit mx-auto">
+        Accept Invitation
+      </Button>
+    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <InviteHandler />
     </Suspense>
   );
 }
