@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Slackify
 
-## Getting Started
+Slackify is a feature-rich collaboration platform that brings seamless communication and productivity to teams and individuals. With powerful tools for real-time chat, collaborative editing, and workspace management, Slackify is designed to simplify workflows and boost team efficiency.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Workspace Management
+- **Create a Workspace**: Users can create dedicated workspaces for their teams or projects.
+- **Invite Users**: Workspace creators can invite members to join their workspace for efficient collaboration.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Channels and Chat
+- **Multiple Channels**: Create multiple channels within a workspace to organize conversations by topics, projects, or teams.
+- **Real-Time Chat**: Engage in real-time chat within channels or through private messaging for direct communication.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Collaborative Tools
+- **Canvas Editor**: Real-time collaborative text editor inspired by Notion for editing documents directly within channels or private chats.
+- **Whiteboard Collaboration**: Collaborate on a shared whiteboard in real time, perfect for brainstorming and planning.
+- **Public Collaboration**:
+  - **Public Canvases**: Create public canvases where anyone with the share link can join.
+  - **Public Whiteboards**: Share public whiteboards for open collaboration via a shareable link.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: [Next.js](https://nextjs.org/) for a fast and interactive user experience.
+- **Database**: [PostgreSQL](https://www.postgresql.org/) hosted on [Neon](https://neon.tech/).
+- **ORM**: [Prisma](https://www.prisma.io/) for database interactions with a type-safe approach.
+- **Authentication**: [NextAuth.js](https://next-auth.js.org/) for secure and seamless user authentication.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
