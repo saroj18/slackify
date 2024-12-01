@@ -13,6 +13,7 @@
     "postinstall": "prisma generate && prisma migrate deploy"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.26.28",
     "@hookform/resolvers": "^3.9.1",
     "@next/font": "^14.2.15",
     "@prisma/client": "^5.22.0",
@@ -52,6 +53,7 @@
     "@tldraw/sync": "^3.4.1",
     "@types/bcrypt": "^5.0.2",
     "@types/nodemailer": "^6.4.16",
+    "@zegocloud/zego-uikit-prebuilt": "^2.13.1",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
@@ -73,10 +75,12 @@
     "pusher-js": "8.4.0-rc2",
     "react": "^18",
     "react-dom": "^18",
+    "react-draggable": "^4.4.6",
     "react-froala-wysiwyg": "^4.3.0",
     "react-hook-form": "^7.53.2",
     "react-markdown": "^9.0.1",
     "react-quill": "^2.0.0",
+    "react-resizable-panels": "^2.1.7",
     "react-social-icons": "^6.18.0",
     "rehype-highlight": "^7.0.1",
     "remark-gfm": "^4.0.0",

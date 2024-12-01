@@ -7,7 +7,7 @@ export default function ChannelLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full">
+    <div className="w-full overflow-hidden">
       {/* <HomeSideBar /> */}
       {children}
     </div>

@@ -1,5 +1,5 @@
 import { PUSHER_CLIENT } from "@/utils/pusher";
-import { Eye, Image, MessageCircle, PenIcon } from "lucide-react";
+import { Eye, Image, MessageCircle, PenIcon, Speaker } from "lucide-react";
 
 export const NavList = [
   {

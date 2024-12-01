@@ -11,7 +11,9 @@ const env = {
   PUSHER_APP_KEY: process.env.PUSHER_APP_KEY,
   PUSHER_APP_SECRET: process.env.PUSHER_APP_SECRET,
   PUSHER_APP_CLUSTER: process.env.PUSHER_APP_CLUSTER,
-}
+  ZEGOCLOUD_APP_ID: process.env.NEXT_PUBLIC_ZEGOCLOUD_APP_ID,
+  ZEGOCLOUD_SECRETE: process.env.NEXT_PUBLIC_ZEGOCLOUD_SECRETE,
+};
 
 for (const key in env) {
   if (!process.env[key]) {

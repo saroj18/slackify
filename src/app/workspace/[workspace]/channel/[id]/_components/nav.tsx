@@ -3,6 +3,14 @@ import { NavList } from "../constant/constant";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Captions, CaptionsOff, Phone } from "lucide-react";
+import { useWorkspaceContext } from "../../../context/workspace-context";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type NavType = {
   state: string;
@@ -14,6 +22,8 @@ export default function Navbar({ setState, state }: NavType) {
   const [channel, setChannel] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const { data } = useSession();
+  const { visible, setVisible, setCallState, callState } =
+    useWorkspaceContext();
 
   useEffect(() => {
     const getChannel = async () => {
@@ -64,6 +74,56 @@ export default function Navbar({ setState, state }: NavType) {
             );
           })
         )}
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              {!callState && (
+                <Phone
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setCallState(true), console.log("clicked");
+                  }}
+                />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Start Call</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              {callState && !visible && (
+                <CaptionsOff
+                  onClick={() => {
+                    setVisible(!visible);
+                  }}
+                  xlinkTitle="show screen"
+                  className="cursor-pointer"
+                />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Show Call Screen</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              {callState && visible && (
+                <Captions
+                  onClick={() => {
+                    setVisible(!visible);
+                  }}
+                  xlinkTitle="hide screen"
+                  className="cursor-pointer"
+                />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Hide Call Screen</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );

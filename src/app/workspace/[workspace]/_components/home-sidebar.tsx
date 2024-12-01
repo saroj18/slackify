@@ -6,7 +6,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight, Plus, User, UserPlus } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  EyeClosed,
+  Plus,
+  User,
+  UserPlus,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Dialog,
@@ -27,6 +34,8 @@ import env from "@/utils/env";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import SideBtnView from "./side-btn-view";
+import { useWorkspaceContext } from "../context/workspace-context";
+import CallPage from "./call-page";
 
 export default function HomeSideBar() {
   const [isOpen, setIsOpen] = React.useState({
@@ -43,6 +52,7 @@ export default function HomeSideBar() {
   const { toast } = useToast();
   const router = useRouter();
   const { data } = useSession();
+  const { callState, setCallState, visible } = useWorkspaceContext();
 
   const clickHandler = (param: string) => {
     if (param === "channel") {
@@ -317,6 +327,14 @@ export default function HomeSideBar() {
           </div>
         </Collapsible>
       </div>
+      {callState && (
+        <CallPage
+          setCallState={setCallState}
+          roomId={((id.id as string) + id.workspace) as string}
+          visible={visible}
+          callState={callState}
+        />
+      )}
     </div>
   );
 }

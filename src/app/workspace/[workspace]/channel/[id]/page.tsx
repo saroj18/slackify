@@ -13,15 +13,14 @@ import WhiteBoardPage from "./pages/whiteboard-page";
 
 export default function page() {
   const [state, setState] = useState("Message");
-  
 
   return (
-    <div className="p-5 w-full h-screen flex flex-col">
+    <div className="p-5 w-full h-screen flex flex-col relative">
       <Navbar setState={setState} state={state} />
       {state == "Message" && <ChatPage />}
       {state == "Canvas" && <CanvasPage />}
       {state == "Canvas Preview" && <CanvasPreviewPage />}
-      {state == "WhiteBoard" && <WhiteBoardPage/>}
+      {state == "WhiteBoard" && <WhiteBoardPage />}
     </div>
   );
 }
