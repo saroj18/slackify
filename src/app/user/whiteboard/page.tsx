@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import WhiteBoardPage from "./_components/whiteboard";
 
 export default function page() {

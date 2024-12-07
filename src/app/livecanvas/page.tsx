@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
-import LiveCanvasPreviewPage from "./_components/canvas-page";
+import dynamic from "next/dynamic";
+
+const LiveCanvasPreviewPage=dynamic(()=>import("./_components/canvas-page"),{ssr:false,loading:()=><p>loading...</p>});
 
 export default function page() {
   return (
-    <Suspense fallback={<p>loading</p>}>
       <LiveCanvasPreviewPage />
-    </Suspense>
   );
 }

@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import WorkSpaceSwitcher from "./workspace-switcher";
-import { HomeIcon, Image, PenIcon, Plus } from "lucide-react";
+import { HomeIcon, Image, PenIcon, Phone, Plus } from "lucide-react";
 import IconAvatar from "./icon-avatar";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -77,6 +77,15 @@ export default function SideBtnView() {
         >
           <PenIcon strokeWidth={1} className="w-8 h-8 text-gray-600" />
         </IconAvatar>
+        {/* <IconAvatar
+          className={params.includes("whiteboard") ? "bg-blue-200" : ""}
+          onClick={() => {
+            router.push("/user/call"), setSideBtn("Call");
+          }}
+          title="Call"
+        >
+          <Phone strokeWidth={1} className="w-8 h-8 text-gray-600" />
+        </IconAvatar> */}
       </div>
 
       <Popover>

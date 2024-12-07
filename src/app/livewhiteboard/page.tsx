@@ -1,10 +1,13 @@
 import React, { Suspense } from "react";
-import WhiteBoardPage from "./_components/whiteboard-preview";
+import dynamic from "next/dynamic";
+
+const WhiteBoardPage = dynamic(
+  () => import("./_components/whiteboard-preview"),
+  { ssr: false,loading: () => <p>loading...</p> }
+);
 
 export default function page() {
   return (
-    <Suspense fallback={<p>loading</p>}>
       <WhiteBoardPage />
-    </Suspense>
   );
 }

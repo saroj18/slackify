@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Request } from "@/utils/axios";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect } from "react";
@@ -19,7 +20,7 @@ function InviteHandler() {
   }, [data, status]);
 
   const clickHandler = async () => {
-    await fetch(`api/invite/${data?.user.id}?workspaceId=${workspaceId}`);
+    await Request.get(`api/invite/${data?.user.id}?workspaceId=${workspaceId}`);
   };
 
   return (

@@ -155,7 +155,7 @@ export const POST = asyncHandler(async (req: Request) => {
       app_id,
       user_id,
       secret,
-      5 // Assuming a default `effectiveTimeInSeconds`
+      500 // Assuming a default `effectiveTimeInSeconds`
     );
 
     return NextResponse.json({ token }, { status: 200 });

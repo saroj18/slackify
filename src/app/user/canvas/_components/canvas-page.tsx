@@ -9,6 +9,8 @@ import { useParams } from "next/navigation";
 import { Channel } from "pusher-js";
 import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { useCall } from "../../_components/Provider";
+import { EyeIcon, EyeOff } from "lucide-react";
 
 export default function CanvasPage() {
   const [content, setContent] = useState<string>("");
@@ -18,6 +20,7 @@ export default function CanvasPage() {
   const pusherRef = useRef<null | Channel>(null);
   const { toast } = useToast();
   const { data } = useSession();
+  const { callState, setCallState, visible, setVisible } = useCall();
 
   // useEffect(() => {
   //   async function sendCanvasContent() {
@@ -83,7 +86,24 @@ export default function CanvasPage() {
 
   return (
     <div className="p-8 w-full">
-      <Button onClick={shareHandler}>Copy Share Link</Button>
+      <div className="flex gap-x-2 items-center">
+        <Button onClick={shareHandler}>Copy Share Link</Button>
+        <Button disabled={callState} onClick={() => setCallState(true)}>
+          Start Call
+        </Button>
+        {callState &&
+          (visible ? (
+            <EyeOff
+              className="cursor-pointer"
+              onClick={() => setVisible(false)}
+            />
+          ) : (
+            <EyeIcon
+              className="cursor-pointer"
+              onClick={() => setVisible(true)}
+            />
+          ))}
+      </div>
       <CanvasEditor
         novelLocalStorageKey={`novel-canvas-channel-${id}`}
         setNewChanges={setNewChanges}
