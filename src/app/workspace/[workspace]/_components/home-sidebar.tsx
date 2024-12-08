@@ -52,7 +52,7 @@ export default function HomeSideBar() {
   const { toast } = useToast();
   const router = useRouter();
   const { data } = useSession();
-  const { callState, setCallState, visible } = useWorkspaceContext();
+  const { callState, setCallState, visible,setCallLoading } = useWorkspaceContext();
 
   const clickHandler = (param: string) => {
     if (param === "channel") {
@@ -329,6 +329,7 @@ export default function HomeSideBar() {
       </div>
       {callState && (
         <CallPage
+          setCallLoading={setCallLoading}
           setCallState={setCallState}
           roomId={((id.id as string) + id.workspace) as string}
           visible={visible}

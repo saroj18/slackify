@@ -11,12 +11,14 @@ type CallPageProps = {
   setCallState: React.Dispatch<React.SetStateAction<boolean>>;
   callState?: boolean;
   roomId: string;
+  setCallLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function CallPage({
   visible,
   setCallState,
   roomId,
+  setCallLoading,
 }: CallPageProps) {
   const { data } = useSession();
   const [token, setToken] = useState<string>("");
@@ -55,6 +57,7 @@ export default function CallPage({
   const myMeeting = useCallback(
     (element: HTMLDivElement | null) => {
       if (element && token) {
+        setCallLoading(true);
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
           env.ZEGOCLOUD_APP_ID as unknown as number,
           token,
@@ -78,6 +81,11 @@ export default function CallPage({
             zp.destroy();
             setToken("");
             setCallState(false);
+            setCallLoading(false);
+          },
+          onJoinRoom() {
+            console.log("join a room");
+            setCallLoading(false);
           },
           sharedLinks: [
             {

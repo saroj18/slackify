@@ -8,7 +8,19 @@ import { useCallback, useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { twMerge } from "tailwind-merge";
 
-export default function CallPage({ visible,setCallState,className }: { className?:string,visible: boolean,setCallState: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function CallPage({
+  visible,
+  setCallState,
+  className,
+  setLoading,
+  loading
+}: {
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
+  className?: string;
+  visible: boolean;
+  setCallState: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [token, setToken] = useState<string>("");
   const { data } = useSession();
   const params = useSearchParams();
@@ -47,6 +59,9 @@ export default function CallPage({ visible,setCallState,className }: { className
 
   const myMeeting = useCallback(
     (element: HTMLDivElement | null) => {
+      if (!loading) {
+        setLoading(true);
+      }
       if (element && token) {
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
           env.ZEGOCLOUD_APP_ID as unknown as number,
@@ -71,6 +86,10 @@ export default function CallPage({ visible,setCallState,className }: { className
             zp.destroy();
             setToken("");
             setCallState(false);
+            setLoading(false);
+          },
+          onJoinRoom() {
+            setLoading(false);
           },
 
           scenario: {
@@ -86,7 +105,7 @@ export default function CallPage({ visible,setCallState,className }: { className
     <Draggable defaultPosition={{ x: 700, y: 0 }}>
       <div
         style={{ visibility: visible ? "visible" : "hidden" }}
-        className={twMerge("h-[10px] w-[10px] z-10 ",className)}
+        className={twMerge("h-[10px] w-[10px] z-10 ", className)}
         ref={myMeeting}
       ></div>
     </Draggable>

@@ -6,7 +6,9 @@ type ContextType = {
   visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     callState: boolean;
-    setCallState: React.Dispatch<React.SetStateAction<boolean>>;
+  setCallState: React.Dispatch<React.SetStateAction<boolean>>;
+  callLoading: boolean;
+  setCallLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const WorkspaceContext = React.createContext({});
@@ -18,6 +20,7 @@ export default function WorkspaceStateProvider({
 }) {
   const [callState, setCallState] = React.useState(false);
   const [visible, setVisible] = React.useState(true);
+  const [callLoading, setCallLoading] = React.useState(false);
   return (
     <WorkspaceContext.Provider
       value={{
@@ -25,6 +28,8 @@ export default function WorkspaceStateProvider({
         callState,
         visible,
         setVisible,
+        callLoading,
+        setCallLoading,
       }}
     >
       {children}

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useSyncDemo } from "@tldraw/sync";
-import { EyeIcon, EyeOff } from "lucide-react";
+import { EyeIcon, EyeOff, LoaderIcon, PhoneCall } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Tldraw, TLUiComponents, useEditor } from "tldraw";
@@ -36,6 +36,8 @@ export default function WhiteBoardPage() {
   const store = useSyncDemo({ roomId: `whiteboard-${params.get("id")}` });
   const [visible, setVisible] = useState(true);
   const [callState, setCallState] = useState(false);
+  const [loading, setLoading] = useState(false);
+  console.log(loading);
 
   return (
     <div aria-readonly className={`tldraw__editor relative h-[800px]`}>
@@ -52,34 +54,38 @@ export default function WhiteBoardPage() {
           // pointerEvents: "all",
         }}
       ></div>
-      <div className="absolute top-0 left-0 z-20">
-        <Button
-          disabled={callState}
+      {loading && (
+        <LoaderIcon className="absolute cursor-pointer left-[3%] top-2 z-30 opacity-50 " />
+      )}
+      {!loading && !callState && (
+        <PhoneCall
+          strokeWidth={1.5}
           onClick={() => setCallState(true)}
-          className="m-2"
-        >
-          Enable Call
-        </Button>
-        {callState &&
-          (visible ? (
-            <EyeOff
-              className="cursor-pointer"
-              onClick={() => setVisible(false)}
-            />
-          ) : (
-            <EyeIcon
-              className="cursor-pointer"
-              onClick={() => setVisible(true)}
-            />
-          ))}
-        {callState && (
-          <CallPage
-            className="absolute left-0 top-0"
-            setCallState={setCallState}
-            visible={visible}
+          className="absolute cursor-pointer left-[3%] top-2 z-30 opacity-50 "
+        />
+      )}
+      {callState &&
+        !loading &&
+        (visible ? (
+          <EyeOff
+            className="cursor-pointer absolute left-[3%] top-2 z-30 opacity-50"
+            onClick={() => setVisible(false)}
           />
-        )}
-      </div>
+        ) : (
+          <EyeIcon
+            className="cursor-pointer absolute left-[3%] top-2 z-30 opacity-50"
+            onClick={() => setVisible(true)}
+          />
+        ))}
+      {callState && (
+        <CallPage
+        loading={loading}
+          setLoading={setLoading}
+          className="absolute left-0 top-0"
+          setCallState={setCallState}
+          visible={visible}
+        />
+      )}
     </div>
   );
 }

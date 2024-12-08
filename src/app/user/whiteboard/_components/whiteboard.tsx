@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { Tldraw } from "tldraw";
 import "tldraw/tldraw.css";
 import { useCall } from "../../_components/Provider";
-import { EyeIcon, EyeOff } from "lucide-react";
+import { Clipboard, EyeIcon, EyeOff, PhoneCall } from "lucide-react";
 
 export default function WhiteBoardPage() {
   const { data } = useSession();
@@ -29,21 +29,31 @@ export default function WhiteBoardPage() {
   };
 
   return (
-    <div className={`tldraw__editor h-[700px] `}>
+    <div className={`tldraw__editor h-full `}>
       <div className="flex gap-x-2 items-center">
-        <Button onClick={shareHandler}>Copy Share Link</Button>
-        <Button disabled={callState} onClick={() => setCallState(true)}>
-          Start Call
-        </Button>
+        <Clipboard
+          strokeWidth={1.5}
+          onClick={shareHandler}
+          className="absolute cursor-pointer left-[25%] top-2 z-30 opacity-50 "
+        />
+        {!callState && (
+          <PhoneCall
+            strokeWidth={1.5}
+            onClick={() => setCallState(true)}
+            className="absolute cursor-pointer left-[28%] top-2 z-30 opacity-50 "
+          />
+        )}
         {callState &&
           (visible ? (
             <EyeOff
-              className="cursor-pointer"
+              strokeWidth={1.5}
+              className="cursor-pointer absolute left-[28%] top-2 z-30 opacity-50"
               onClick={() => setVisible(false)}
             />
           ) : (
             <EyeIcon
-              className="cursor-pointer"
+              strokeWidth={1.5}
+              className="cursor-pointer absolute left-[28%] top-2 z-30 opacity-50"
               onClick={() => setVisible(true)}
             />
           ))}

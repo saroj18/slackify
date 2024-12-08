@@ -10,7 +10,7 @@ import { Channel } from "pusher-js";
 import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { useCall } from "../../_components/Provider";
-import { EyeIcon, EyeOff } from "lucide-react";
+import { Clipboard, EyeIcon, EyeOff, PhoneCall } from "lucide-react";
 
 export default function CanvasPage() {
   const [content, setContent] = useState<string>("");
@@ -87,19 +87,28 @@ export default function CanvasPage() {
   return (
     <div className="p-8 w-full">
       <div className="flex gap-x-2 items-center">
-        <Button onClick={shareHandler}>Copy Share Link</Button>
-        <Button disabled={callState} onClick={() => setCallState(true)}>
-          Start Call
-        </Button>
+        <Clipboard
+          strokeWidth={1.5}
+          onClick={shareHandler}
+          className="absolute cursor-pointer left-[6%] top-2 z-30 opacity-50 "
+        />
+        {!callState && (
+          <PhoneCall
+            strokeWidth={1.5}
+            onClick={() => setCallState(true)}
+            className="absolute cursor-pointer left-[9%] top-2 z-30 opacity-50 "
+          />
+        )}
+
         {callState &&
           (visible ? (
             <EyeOff
-              className="cursor-pointer"
+              className="cursor-pointer absolute left-[9%] top-2 z-30 opacity-50"
               onClick={() => setVisible(false)}
             />
           ) : (
             <EyeIcon
-              className="cursor-pointer"
+              className="cursor-pointer absolute left-[9%] top-2 z-30 opacity-50"
               onClick={() => setVisible(true)}
             />
           ))}

@@ -3,7 +3,7 @@ import { NavList } from "../constant/constant";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Captions, CaptionsOff, Phone } from "lucide-react";
+import { Captions, CaptionsOff, LoaderIcon, Phone } from "lucide-react";
 import { useWorkspaceContext } from "../../../context/workspace-context";
 import {
   Tooltip,
@@ -22,8 +22,15 @@ export default function Navbar({ setState, state }: NavType) {
   const [channel, setChannel] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const { data } = useSession();
-  const { visible, setVisible, setCallState, callState } =
-    useWorkspaceContext();
+  const {
+    visible,
+    setVisible,
+    setCallState,
+    callState,
+    callLoading,
+    setCallLoading,
+  } = useWorkspaceContext();
+  console.log(callLoading);
 
   useEffect(() => {
     const getChannel = async () => {
@@ -78,14 +85,16 @@ export default function Navbar({ setState, state }: NavType) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              {!callState && (
+              {!callState && !callLoading && (
                 <Phone
                   className="cursor-pointer"
                   onClick={() => {
                     setCallState(true), console.log("clicked");
+                    setCallLoading(true);
                   }}
                 />
               )}
+              {callLoading && <LoaderIcon />}
             </TooltipTrigger>
             <TooltipContent>
               <p>Start Call</p>
@@ -93,7 +102,7 @@ export default function Navbar({ setState, state }: NavType) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger>
-              {callState && !visible && (
+              {callState && !visible && !callLoading && (
                 <CaptionsOff
                   onClick={() => {
                     setVisible(!visible);
@@ -109,7 +118,7 @@ export default function Navbar({ setState, state }: NavType) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger>
-              {callState && visible && (
+              {callState && visible && !loading && (
                 <Captions
                   onClick={() => {
                     setVisible(!visible);
