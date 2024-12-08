@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { SearchIcon } from "lucide-react";
+import { Router, SearchIcon } from "lucide-react";
 import {
   Command,
   CommandDialog,
@@ -20,10 +20,15 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDebounce } from "use-debounce";
+import { useRouter } from "next/navigation";
 
 export default function SearchBox() {
   const [open, setOpen] = React.useState(false);
+  const [searchText, setSearchText] = React.useState("");
+  const [workspaceList, setWorkspaceList] = React.useState<any[]>([]);
+  const router = useRouter();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -36,9 +41,33 @@ export default function SearchBox() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  const [deboundedSearchText] = useDebounce(searchText, 500);
+
+  const changeHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    setSearchText(e.currentTarget.value);
+  };
+
+  useEffect(() => {
+    const searchWorkspace = async () => {
+      const resp = await fetch(`/api/workspace?search=${deboundedSearchText}`);
+      const data = await resp.json();
+      setWorkspaceList(data.data);
+    };
+    if (searchText) {
+      searchWorkspace();
+    }
+  }, [deboundedSearchText]);
+
+  const clickHandler = (id: string) => {
+    router.push(`/workspace/${id}`);
+  };
+  console.log("workspaceList", workspaceList);
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <div onClick={() => setOpen(true)} className="flex items-center gap-x-2 cursor-pointer">
+      <div
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-x-2 cursor-pointer"
+      >
         <CommandShortcut className="text-lg">Ctrl+K</CommandShortcut>
         <SearchIcon />
       </div>
@@ -47,14 +76,25 @@ export default function SearchBox() {
           <DialogTitle>Search Your Projects</DialogTitle>
           <DialogDescription>
             <Command className="max-w-2xl">
-              <CommandInput placeholder="Type a command or search..." />
+              <CommandInput
+                onChangeCapture={changeHandler}
+                placeholder="Type a command or search..."
+              />
               <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup heading="Suggestions">
-                  <CommandItem>Calendar</CommandItem>
-                  <CommandItem>Search Emoji</CommandItem>
-                  <CommandItem>Calculator</CommandItem>
-                </CommandGroup>
+                {workspaceList.length > 0 && (
+                  <CommandGroup heading="Suggestions">
+                    {workspaceList.map((workspace) => (
+                      <CommandItem
+                        className="cursor-pointer"
+                        key={workspace.id}
+                        onSelect={() => clickHandler(workspace.id)}
+                      >
+                        {workspace.name}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                )}
                 <CommandSeparator />
               </CommandList>
             </Command>
