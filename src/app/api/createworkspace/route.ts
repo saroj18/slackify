@@ -1,12 +1,15 @@
 import { ApiError } from "@/helper/ApiError";
 import { asyncHandler } from "@/helper/asyncHandler";
+import { sendMail } from "@/helper/mailConfig";
+import { InviteMessage } from "@/lib/invition-message";
 import { WorkSpaceZodSchema } from "@/schema/workspace";
 import { getUser, UserType } from "@/utils/checkUserOnServer";
+import env from "@/utils/env";
 import { prisma } from "@/utils/prismaDb";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (req: NextRequest) => {
-  const { id,email,name } = await getUser<UserType>();
+  const { id, email, name } = await getUser<UserType>();
 
   let { workspaceName, creatorName, users, projectName } = await req.json();
   users = Array.isArray(users) ? users : [users];
@@ -36,13 +39,11 @@ export const POST = asyncHandler(async (req: NextRequest) => {
       createdBy: id,
       workspaceUsers: {
         connect: {
-          id
-        }
-      }
+          id,
+        },
+      },
     },
-  
   });
-
 
   await prisma.channel.create({
     data: {
@@ -53,6 +54,17 @@ export const POST = asyncHandler(async (req: NextRequest) => {
 
   if (!newWorkspace) {
     throw new ApiError("Workspace creation failed", 400);
+  }
+
+  const link = `${env.NEXT_PUBLIC_API_URL}/invite?workspaceId=${newWorkspace.id}`;
+  const data = await sendMail(
+    users,
+    "Invitation to join workspace",
+    InviteMessage(link)
+  );
+
+  if (!data) {
+    throw new ApiError("Email sending failed", 400);
   }
 
   return NextResponse.json(

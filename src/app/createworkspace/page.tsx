@@ -7,11 +7,12 @@ import YourName from "./_components/your-name";
 import Invite from "./_components/invite";
 import ProjectName from "./_components/project-name";
 import { useRouter } from "next/navigation";
+import LoadingScreen from "./_components/loading-screen";
 
 type WorkSpace = {
   workspaceName: string;
   creatorName: string;
-  users: string;
+  users: string[];
   projectName: string;
 };
 
@@ -23,12 +24,13 @@ export type WorkSpaceProps = {
 export default function page() {
   const [step, setStep] = useState(1);
   const router = useRouter();
-  const [workspace, setWorkspace] = useState({
+  const [workspace, setWorkspace] = useState<WorkSpace>({
     workspaceName: "",
     creatorName: "",
-    users: "",
+    users: [],
     projectName: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const stepHandler = async (param: string) => {
     console.log("demo");
@@ -52,15 +54,22 @@ export default function page() {
         alert("Please fill all the fields");
         return null;
       } else {
-        const res = await fetch("/api/createworkspace", {
-          method: "POST",
-          body: JSON.stringify(workspace),
-        });
-        const respData = await res.json();
-        console.log(respData);
-        if (respData.success) {
-          const newWorkspace = respData.data;
-          router.push(`/workspace/${newWorkspace.id}`);
+        try {
+          setLoading(true);
+          const res = await fetch("/api/createworkspace", {
+            method: "POST",
+            body: JSON.stringify(workspace),
+          });
+          const respData = await res.json();
+          console.log(respData);
+          if (respData.success) {
+            const newWorkspace = respData.data;
+            router.push(`/workspace/${newWorkspace.id}`);
+          }
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
         }
       }
     }
@@ -102,6 +111,7 @@ export default function page() {
           </Button>
         )}
       </div>
+      {loading && <LoadingScreen />}
     </div>
   );
 }
